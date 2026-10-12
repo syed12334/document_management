@@ -1,0 +1,376 @@
+<style>
+  .al-page {
+    --al-ink: #12222b;
+    --al-muted: #5f727d;
+    --al-line: #e3eaee;
+    --al-surface: #ffffff;
+    --al-bg: #eef3f5;
+    --al-accent: #0d7f78;
+    --al-accent-strong: #0a625d;
+    --al-accent-soft: #e3f4f2;
+    --al-danger: #c62f3b;
+    --al-danger-soft: #fdecee;
+    --al-success: #1f7a4d;
+    --al-success-soft: #e6f6ee;
+    background: var(--al-bg);
+    min-height: 100%;
+    padding: 40px 16px;
+    color: var(--al-ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .al-wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* Alerts */
+  .al-alert {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding: 12px 14px;
+    border-radius: 12px; font-size: 13.5px; font-weight: 500;
+    border-left: 3px solid;
+  }
+  .al-alert > div { flex: 1; }
+  .al-alert--success { background: var(--al-success-soft); color: var(--al-success); border-color: var(--al-success); }
+  .al-alert--danger { background: var(--al-danger-soft); color: var(--al-danger); border-color: var(--al-danger); }
+  .al-alert .btn-close { margin: 0; padding: 6px; font-size: 11px; }
+
+  /* Header */
+  .al-head {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 16px; margin-bottom: 22px;
+  }
+  .al-head h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  .al-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--al-muted); }
+  .al-count {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 2px 10px; border-radius: 999px;
+    background: var(--al-accent-soft); color: var(--al-accent-strong);
+    font-weight: 600; font-size: 12.5px;
+  }
+
+  /* Buttons */
+  .al-btn {
+    height: 42px; padding: 0 18px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-size: 14px; font-weight: 600;
+    border-radius: 12px; border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .al-btn:active { transform: translateY(1px); }
+  .al-btn:focus-visible { outline: 3px solid rgba(13,127,120,.35); outline-offset: 2px; }
+  .al-btn--primary { background: var(--al-accent); color: #fff; }
+  .al-btn--primary:hover { background: var(--al-accent-strong); color: #fff; }
+  .al-btn--ghost { background: transparent; color: var(--al-ink); border-color: var(--al-line); }
+  .al-btn--ghost:hover { background: #f6f9fa; color: var(--al-ink); }
+
+  /* Card */
+  .al-card {
+    background: var(--al-surface);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px -28px rgba(18,34,43,.3);
+    overflow: hidden;
+  }
+
+  /* Toolbar */
+  .al-toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 16px 20px; border-bottom: 1px solid var(--al-line);
+  }
+  .al-search { position: relative; flex: 1 1 260px; max-width: 380px; }
+  .al-search i {
+    position: absolute; top: 50%; left: 14px; transform: translateY(-50%);
+    color: #93a4ad; pointer-events: none;
+  }
+  .al-input {
+    display: block; width: 100%; height: 44px; padding: 0 14px 0 40px;
+    font: inherit; font-size: 14.5px; color: var(--al-ink);
+    background: #f6f9fa; border: 1.5px solid transparent; border-radius: 12px;
+    box-sizing: border-box;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .al-input::placeholder { color: #93a4ad; }
+  .al-input:hover { background: #f0f5f7; }
+  .al-input:focus {
+    outline: none; background: #fff; border-color: var(--al-accent);
+    box-shadow: 0 0 0 4px rgba(13,127,120,.14);
+  }
+
+  /* Table */
+  .al-table-wrap { overflow-x: auto; }
+  .al-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .al-table thead th {
+    padding: 12px 16px; text-align: left; white-space: nowrap;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--al-muted); background: #f6f9fa;
+    border-bottom: 1px solid var(--al-line);
+  }
+  .al-table tbody td {
+    padding: 14px 16px; vertical-align: middle;
+    border-bottom: 1px solid var(--al-line);
+  }
+  .al-table tbody tr:last-child td { border-bottom: 0; }
+  .al-table tbody tr:hover { background: #f9fbfc; }
+  .al-id { color: var(--al-muted); font-variant-numeric: tabular-nums; }
+  .al-user { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .al-avatar {
+    width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--al-accent-soft); color: var(--al-accent-strong);
+    font-size: 12.5px; font-weight: 700; text-transform: uppercase;
+  }
+  .al-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; color: var(--al-ink);
+  }
+  .al-ua {
+    display: block; max-width: 260px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; color: var(--al-muted); font-size: 13px;
+  }
+  .al-dash { color: #b3c0c7; }
+
+  .al-badge {
+    display: inline-block; padding: 5px 11px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+  }
+  .al-badge--doc { background: #e6efff; color: #2456c7; }
+  .al-badge--folder { background: #fff3d6; color: #8a5a00; }
+  .al-badge--other { background: #eceff1; color: #4a5b65; }
+
+  /* Empty state */
+  .al-empty { padding: 56px 16px !important; text-align: center; color: var(--al-muted); }
+  .al-empty i { display: block; font-size: 34px; margin-bottom: 10px; color: #b3c0c7; }
+
+  /* Pagination */
+  .al-foot {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 12px;
+    padding: 14px 20px; border-top: 1px solid var(--al-line);
+  }
+  .al-foot small { color: var(--al-muted); font-size: 13px; }
+  .al-pager { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .al-pager a, .al-pager span {
+    min-width: 36px; height: 36px; padding: 0 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 13.5px; font-weight: 600; text-decoration: none;
+    color: var(--al-ink); border: 1.5px solid var(--al-line); border-radius: 10px;
+    background: #fff; transition: background .15s ease, border-color .15s ease;
+  }
+  .al-pager a:hover { background: #f6f9fa; }
+  .al-pager .is-active span, .al-pager .is-active a {
+    background: var(--al-accent); border-color: var(--al-accent); color: #fff;
+  }
+  .al-pager .is-disabled span { color: #a9b6bd; background: #f6f9fa; cursor: not-allowed; }
+  .al-pager .is-gap span { border-color: transparent; background: transparent; color: var(--al-muted); }
+
+  /* Preloader */
+  .search-preloader {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    align-items: center; justify-content: center;
+    background: rgba(238,243,245,0);
+  }
+  .search-preloader.active { display: flex; }
+
+  @media (max-width: 640px) {
+    .al-page { padding: 20px 12px; }
+    .al-head h1 { font-size: 22px; }
+    .al-search { max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .al-page * { transition: none !important; }
+  }
+</style>
+
+<%
+  // Pagination pages (with ellipses)
+  var pages = [];
+  if (totalPages <= 7) {
+    for (var i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 4) pages.push('...');
+    var startPage = Math.max(2, currentPage - 1);
+    var endPage = Math.min(totalPages - 1, currentPage + 1);
+    for (var j = startPage; j <= endPage; j++) pages.push(j);
+    if (currentPage < totalPages - 3) pages.push('...');
+    pages.push(totalPages);
+  }
+  var baseQuery = '&limit=' + limit + '&search=' + encodeURIComponent(search || '');
+%>
+
+<div class="body flex-grow-1">
+  <div class="al-page">
+    <div class="al-wrap">
+
+      <% if (success) { %>
+        <div class="al-alert al-alert--success alert alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill"></i>
+          <div><%= success %></div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="al-alert al-alert--danger alert alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div><%= error %></div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Header -->
+      <div class="al-head">
+        <div>
+          <h1>Audit logs</h1>
+          <p><span class="al-count"><%= totalUsers %></span> audit logs recorded</p>
+        </div>
+
+        <% if (hasPermission('view-user-history')) { %>
+          <a class="al-btn al-btn--primary" href="<%= appUrl %>audit/logs/export">
+            <i class="bi bi-download"></i> Download audit logs
+          </a>
+        <% } %>
+      </div>
+
+      <div class="al-card">
+
+        <!-- Toolbar -->
+        <div class="al-toolbar">
+          <div class="al-search">
+            <i class="bi bi-search"></i>
+            <input
+              type="text"
+              name="search"
+              id="auditLogsSearch"
+              class="al-input"
+              value="<%= search %>"
+              placeholder="Search audit logs"
+              autocomplete="off"
+            >
+          </div>
+
+          <% if (search) { %>
+            <a href="<%= appUrl %>audit/logs" class="al-btn al-btn--ghost">
+              <i class="bi bi-x-lg"></i> Clear
+            </a>
+          <% } %>
+        </div>
+
+        <!-- Table -->
+        <div class="al-table-wrap">
+          <table class="al-table" id="auditLogsTableWrapper">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Folder name</th>
+                <th>Document name</th>
+                <th>IP address</th>
+                <th>User agent</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (auditLogs.length === 0) { %>
+                <tr>
+                  <td colspan="7" class="al-empty">
+                    <i class="bi bi-file-earmark-x"></i>
+                    <% if (search) { %>
+                      No audit logs found for "<strong><%= search %></strong>".
+                    <% } else { %>
+                      No audit logs found.
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+
+              <% auditLogs.forEach(function (auditLog, index) {
+                   var actionLower = (auditLog.action || '').toLowerCase();
+                   var badgeClass = 'al-badge--other';
+                   if (actionLower.includes('document')) badgeClass = 'al-badge--doc';
+                   else if (actionLower.includes('folder')) badgeClass = 'al-badge--folder';
+                   var username = auditLog.user ? auditLog.user.username : '';
+              %>
+                <tr>
+                  <td class="al-id"><%= (currentPage - 1) * limit + index + 1 %></td>
+
+                  <td>
+                    <% if (username) { %>
+                      <div class="al-user">
+                        <span class="al-avatar"><%= username.charAt(0) %></span>
+                        <span><%= username %></span>
+                      </div>
+                    <% } else { %>
+                      <span class="al-dash">-</span>
+                    <% } %>
+                  </td>
+
+                  <td><%= auditLog.folder ? auditLog.folder.name : '-' %></td>
+                  <td><%= auditLog.document ? auditLog.document.original_name : '-' %></td>
+                  <td class="al-mono"><%= auditLog.ip_address || '-' %></td>
+                  <td>
+                    <span class="al-ua" title="<%= auditLog.user_agent || '' %>"><%= auditLog.user_agent || '-' %></span>
+                  </td>
+                  <td>
+                    <span class="al-badge <%= badgeClass %>"><%= auditLog.action %></span>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <% if (auditLogs.length > 0 && totalPages > 1) { %>
+          <div class="al-foot">
+            <small>Page <%= currentPage %> of <%= totalPages %></small>
+
+            <nav aria-label="Audit logs pagination">
+              <ul class="al-pager">
+
+                <li class="<%= !hasPreviousPage ? 'is-disabled' : '' %>">
+                  <% if (hasPreviousPage) { %>
+                    <a href="<%= appUrl %>audit/logs?page=<%= previousPage %><%= baseQuery %>">Previous</a>
+                  <% } else { %>
+                    <span>Previous</span>
+                  <% } %>
+                </li>
+
+                <% pages.forEach(function (page) { %>
+                  <% if (page === '...') { %>
+                    <li class="is-gap"><span>…</span></li>
+                  <% } else { %>
+                    <li class="<%= currentPage === page ? 'is-active' : '' %>">
+                      <a href="<%= appUrl %>audit/logs?page=<%= page %><%= baseQuery %>"><%= page %></a>
+                    </li>
+                  <% } %>
+                <% }) %>
+
+                <li class="<%= !hasNextPage ? 'is-disabled' : '' %>">
+                  <% if (hasNextPage) { %>
+                    <a href="<%= appUrl %>audit/logs?page=<%= nextPage %><%= baseQuery %>">Next</a>
+                  <% } else { %>
+                    <span>Next</span>
+                  <% } %>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+        <% } %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="searchPreloader" class="search-preloader">
+  <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="mt-2 fw-semibold">Searching...</div>
+  </div>
+</div>
+
+<script src="<%= appUrl %>js/auditlogs.js"></script>

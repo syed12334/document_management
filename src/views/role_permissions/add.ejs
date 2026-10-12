@@ -1,0 +1,369 @@
+<style>
+  .au-page {
+    --au-ink: #12222b;
+    --au-muted: #5f727d;
+    --au-line: #dbe4e8;
+    --au-surface: #ffffff;
+    --au-bg: #eef3f5;
+    --au-accent: #0d7f78;
+    --au-accent-strong: #0a625d;
+    --au-accent-soft: #e3f4f2;
+    --au-danger: #c62f3b;
+    --au-danger-soft: #fdecee;
+    background: var(--au-bg);
+    min-height: 100%;
+    padding: 48px 16px;
+    color: var(--au-ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .au-shell {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    background: var(--au-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px -20px rgba(18, 34, 43, 0.25);
+  }
+
+  /* Left panel */
+  .au-side {
+    background: #2f7d6f;
+    color: #e8f0f2;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .au-side h1 {
+    margin: 0; font-size: 26px; line-height: 1.2; font-weight: 700;
+    letter-spacing: -0.02em; color: #fff;
+  }
+  .au-side p { margin: 10px 0 0; font-size: 14px; line-height: 1.55; color: #a9bcc4; }
+  .au-tips-title { font-size: 13px; font-weight: 600; color: #fff; margin: 0 0 12px; }
+  .au-tips { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .au-tips li {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px; line-height: 1.45; color: #a9bcc4;
+  }
+  .au-tips li::before {
+    content: ""; width: 6px; height: 6px; margin-top: 6px; flex-shrink: 0;
+    border-radius: 50%; background: #35c2b6;
+  }
+
+  /* Form panel */
+  .au-main { padding: 36px 40px 40px; min-width: 0; }
+  .au-main-head { margin-bottom: 26px; }
+  .au-main-head h2 { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: -0.01em; }
+  .au-main-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--au-muted); }
+
+  .au-alert {
+    margin-bottom: 20px; padding: 12px 14px; border-radius: 10px;
+    background: var(--au-danger-soft); color: var(--au-danger);
+    font-size: 13.5px; font-weight: 500; border-left: 3px solid var(--au-danger);
+  }
+
+  .au-field { min-width: 0; margin-bottom: 26px; }
+  .au-label {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 7px; font-size: 13px; font-weight: 600; color: var(--au-ink);
+  }
+  .au-label .au-req { color: var(--au-danger); margin-left: 2px; }
+
+  .au-input, .au-select {
+    display: block; width: 100%; height: 46px; padding: 0 14px;
+    font: inherit; font-size: 14.5px; color: var(--au-ink);
+    background: #f6f9fa; border: 1.5px solid transparent; border-radius: 12px;
+    box-sizing: border-box;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .au-input::placeholder { color: #93a4ad; }
+  .au-input:hover, .au-select:hover { background: #f0f5f7; }
+  .au-input:focus, .au-select:focus {
+    outline: none; background: #fff; border-color: var(--au-accent);
+    box-shadow: 0 0 0 4px rgba(13, 127, 120, 0.14);
+  }
+  .au-select {
+    padding-right: 40px; appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%235f727d' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+  }
+  .is-invalid { background-color: var(--au-danger-soft) !important; border-color: var(--au-danger) !important; }
+
+  .au-error { margin-top: 6px; font-size: 12.5px; font-weight: 500; color: var(--au-danger); }
+
+  .au-count {
+    font-size: 12px; font-weight: 600; color: var(--au-accent-strong);
+    background: var(--au-accent-soft); padding: 3px 10px; border-radius: 999px;
+  }
+
+  /* Permission toolbar */
+  .rp-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .rp-search { position: relative; flex: 1 1 200px; }
+  .rp-search i {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    color: #93a4ad; pointer-events: none;
+  }
+  .rp-search .au-input { padding-left: 40px; height: 44px; }
+
+  .au-btn {
+    height: 44px; padding: 0 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font: inherit; font-size: 14px; font-weight: 600;
+    border-radius: 12px; border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none; white-space: nowrap;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .au-btn:active { transform: translateY(1px); }
+  .au-btn:focus-visible { outline: 3px solid rgba(13, 127, 120, 0.35); outline-offset: 2px; }
+  .au-btn--ghost { background: transparent; color: var(--au-ink); border-color: var(--au-line); }
+  .au-btn--ghost:hover { background: #f6f9fa; color: var(--au-ink); }
+  .au-btn--soft { background: var(--au-accent-soft); color: var(--au-accent-strong); padding: 0 16px; }
+  .au-btn--soft:hover { background: #d2ece9; }
+  .au-btn--primary { background: var(--au-accent); color: #fff; min-width: 152px; }
+  .au-btn--primary:hover { background: var(--au-accent-strong); color: #fff; }
+  .au-btn--primary[disabled] { opacity: 0.7; cursor: progress; }
+
+  /* Permission grid */
+  .rp-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 10px; max-height: 340px; overflow-y: auto; padding: 3px; margin: -3px;
+  }
+  .rp-item {
+    position: relative; display: flex; align-items: center; gap: 10px;
+    padding: 11px 13px; background: #fff; border: 1.5px solid var(--au-line);
+    border-radius: 12px; cursor: pointer; user-select: none;
+    transition: border-color .15s ease, background .15s ease;
+  }
+  .rp-item:hover { border-color: #9fd3ce; background: #f7fcfb; }
+  .rp-item input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .rp-check {
+    flex-shrink: 0; width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    border: 1.5px solid #c4d0d6; border-radius: 5px; background: #fff;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .rp-check svg { opacity: 0; transform: scale(.6); transition: opacity .12s, transform .12s; }
+  .rp-item input:checked ~ .rp-check { background: var(--au-accent); border-color: var(--au-accent); }
+  .rp-item input:checked ~ .rp-check svg { opacity: 1; transform: scale(1); }
+  .rp-item input:focus-visible ~ .rp-check { box-shadow: 0 0 0 3px rgba(13, 127, 120, .3); }
+  .rp-item:has(input:checked) { border-color: var(--au-accent); background: var(--au-accent-soft); }
+  .rp-name { font-size: 13.5px; font-weight: 500; line-height: 1.3; word-break: break-word; }
+  .rp-item.is-hidden { display: none; }
+
+  .rp-empty {
+    display: none; padding: 28px 16px; text-align: center;
+    font-size: 13.5px; color: var(--au-muted);
+    border: 1.5px dashed var(--au-line); border-radius: 12px; background: #f9fbfc;
+  }
+  .rp-empty.is-visible { display: block; }
+
+  .au-actions {
+    display: flex; justify-content: flex-end; gap: 10px;
+    margin-top: 32px; padding-top: 22px; border-top: 1px solid var(--au-line);
+  }
+
+  @media (max-width: 800px) {
+    .au-page { padding: 20px 12px; }
+    .au-shell { grid-template-columns: 1fr; }
+    .au-side { padding: 26px 24px; gap: 20px; }
+    .au-main { padding: 26px 24px 28px; }
+  }
+  @media (max-width: 480px) {
+    .au-actions { flex-direction: column-reverse; }
+    .au-btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .au-page * { transition: none !important; }
+  }
+</style>
+
+<%
+  // Works with both shapes:
+  //  - object keyed by field: { roles: 'Select a role' }
+  //  - array of express-validator errors: [{ path: 'roles', msg: '...' }]
+  var formErrors = (typeof errors !== 'undefined' && errors) ? errors : {};
+  var oldData = (typeof old !== 'undefined' && old) ? old : {};
+
+  function getError(field) {
+    if (Array.isArray(formErrors)) {
+      var found = formErrors.find(function (e) {
+        return e.path === field || e.param === field;
+      });
+      return found ? found.msg : '';
+    }
+    return formErrors[field] || '';
+  }
+
+  var rolesError = getError('roles');
+  var permissionsError = getError('permissions');
+  var generalError = getError('general');
+
+  // Re-select previous values after a failed validation (if the controller passes `old`)
+  var oldRole = oldData.roles ? String(oldData.roles) : '';
+  var oldPerms = [].concat(oldData.permissions || []).map(String);
+%>
+
+<div class="body flex-grow-1">
+  <div class="au-page">
+    <div class="au-shell">
+
+      <!-- Left: intro + tips -->
+      <aside class="au-side">
+        <div>
+          <h1>Assign permissions</h1>
+          <p>Choose a role and the actions it is allowed to perform.</p>
+        </div>
+
+        <div>
+          <h3 class="au-tips-title">Good to know</h3>
+          <ul class="au-tips">
+            <li>Pick the role first, then tick each permission it needs.</li>
+            <li>Use search to quickly find a permission by name.</li>
+            <li>Grant only the access a role really needs.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Right: form -->
+      <main class="au-main">
+        <div class="au-main-head">
+          <h2>Role &amp; permissions</h2>
+          <p>Fields marked with <span style="color:#c62f3b">*</span> are required.</p>
+        </div>
+
+        <form id="permForm" action="<%= appUrl %>role/permission/saveRole" method="POST" autocomplete="off">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <% if (generalError) { %>
+            <div class="au-alert" role="alert"><%= generalError %></div>
+          <% } %>
+
+          <!-- Role -->
+          <div class="au-field">
+            <label class="au-label" for="roleSelect">
+              <span>Role<span class="au-req">*</span></span>
+            </label>
+
+            <select id="roleSelect" name="roles" class="au-select <%= rolesError ? 'is-invalid' : '' %>" required>
+              <option value="">Select role</option>
+              <% roles.forEach(function (role) { %>
+                <option value="<%= role.id %>" <%= oldRole === String(role.id) ? 'selected' : '' %>><%= role.name %></option>
+              <% }) %>
+            </select>
+
+            <% if (rolesError) { %>
+              <div class="au-error"><%= rolesError %></div>
+            <% } %>
+          </div>
+
+          <!-- Permissions -->
+          <div class="au-field">
+            <div class="au-label">
+              <span>Permissions<span class="au-req">*</span></span>
+              <span class="au-count" id="permCount">0 selected</span>
+            </div>
+
+            <div class="rp-toolbar">
+              <div class="rp-search">
+                <i class="bi bi-search"></i>
+                <input type="text" id="permSearch" class="au-input" placeholder="Search permissions" autocomplete="off" aria-label="Search permissions">
+              </div>
+              <button type="button" class="au-btn au-btn--soft" id="permToggleAll">Select all</button>
+            </div>
+
+            <div class="rp-grid" id="permGrid">
+              <% permissions.forEach(function (permission) { %>
+                <label class="rp-item" data-name="<%= String(permission.name).toLowerCase() %>">
+                  <input type="checkbox" name="permissions[]" value="<%= permission.id %>"
+                    <%= oldPerms.indexOf(String(permission.id)) !== -1 ? 'checked' : '' %>>
+                  <span class="rp-check">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2.5 6.2l2.4 2.4 4.6-5"/>
+                    </svg>
+                  </span>
+                  <span class="rp-name"><%= permission.name %></span>
+                </label>
+              <% }) %>
+            </div>
+
+            <div class="rp-empty <%= permissions.length ? '' : 'is-visible' %>" id="permEmpty">
+              <%= permissions.length ? 'No permissions match your search.' : 'No permissions available yet.' %>
+            </div>
+
+            <% if (permissionsError) { %>
+              <div class="au-error"><%= permissionsError %></div>
+            <% } %>
+          </div>
+
+          <div class="au-actions">
+            <a href="<%= appUrl %>permissions" class="au-btn au-btn--ghost">Cancel</a>
+            <button type="submit" class="au-btn au-btn--primary" id="saveBtn">Save permissions</button>
+          </div>
+        </form>
+      </main>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var form = document.getElementById('permForm');
+    var saveBtn = document.getElementById('saveBtn');
+    var grid = document.getElementById('permGrid');
+    var search = document.getElementById('permSearch');
+    var toggleBtn = document.getElementById('permToggleAll');
+    var countEl = document.getElementById('permCount');
+    var emptyEl = document.getElementById('permEmpty');
+    if (!grid) return;
+
+    var items = Array.prototype.slice.call(grid.querySelectorAll('.rp-item'));
+
+    function visibleItems() {
+      return items.filter(function (el) { return !el.classList.contains('is-hidden'); });
+    }
+
+    function allVisibleChecked() {
+      var visible = visibleItems();
+      return visible.length > 0 && visible.every(function (el) {
+        return el.querySelector('input').checked;
+      });
+    }
+
+    function refresh() {
+      countEl.textContent = grid.querySelectorAll('input:checked').length + ' selected';
+      toggleBtn.textContent = allVisibleChecked() ? 'Clear all' : 'Select all';
+    }
+
+    search.addEventListener('input', function () {
+      var q = search.value.trim().toLowerCase();
+      items.forEach(function (el) {
+        el.classList.toggle('is-hidden', !!q && el.getAttribute('data-name').indexOf(q) === -1);
+      });
+      if (items.length) {
+        emptyEl.textContent = 'No permissions match your search.';
+        emptyEl.classList.toggle('is-visible', visibleItems().length === 0);
+      }
+      refresh();
+    });
+
+    toggleBtn.addEventListener('click', function () {
+      var on = !allVisibleChecked();
+      visibleItems().forEach(function (el) { el.querySelector('input').checked = on; });
+      refresh();
+    });
+
+    grid.addEventListener('change', refresh);
+
+    // Prevent double submits
+    form.addEventListener('submit', function () {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+    });
+
+    refresh();
+  })();
+</script>

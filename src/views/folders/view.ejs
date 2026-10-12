@@ -1,0 +1,187 @@
+<%
+    const parentFolder = folders.find(
+        item => String(item.id) === String(folder.parent_id)
+    );
+
+    const users = (folder.folderuser || [])
+        .map(fu => (fu.user ? fu.user.username : null))
+        .filter(Boolean);
+
+    const initials = name =>
+        name.split(/[\s._-]+/).filter(Boolean).slice(0, 2)
+            .map(p => p[0].toUpperCase()).join('') || '?';
+%>
+
+<div class="body flex-grow-1">
+    <div class="vf-shell">
+
+        <!-- Page header -->
+        <header class="vf-top">
+            <a href="<%= appUrl %>folders" class="vf-back" aria-label="Back to folders" title="Back to folders">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <div class="vf-top-text">
+                <h1 class="vf-page-title">Folder details</h1>
+                <p class="vf-page-sub">See where this folder lives and who can access it.</p>
+            </div>
+        </header>
+
+        <section class="vf-card">
+
+            <!-- Identity -->
+            <div class="vf-hero">
+                <div class="vf-icon" aria-hidden="true"><i class="bi bi-folder-fill"></i></div>
+                <div class="vf-hero-text">
+                    <h2 class="vf-title"><%= folder.name %></h2>
+                    <p class="vf-path">
+                        <i class="bi bi-diagram-2"></i>
+                        <% if (parentFolder) { %>
+                            <span><%= parentFolder.name %></span>
+                            <i class="bi bi-chevron-right vf-sep"></i>
+                        <% } else { %>
+                            <span>Top level</span>
+                            <i class="bi bi-chevron-right vf-sep"></i>
+                        <% } %>
+                        <strong><%= folder.name %></strong>
+                    </p>
+                </div>
+                <div class="vf-stat" title="Users with access">
+                    <span class="vf-stat-num"><%= users.length %></span>
+                    <span class="vf-stat-label">user<%= users.length === 1 ? '' : 's' %></span>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <dl class="vf-list">
+                <div class="vf-row">
+                    <dt><i class="bi bi-folder2"></i> Folder name</dt>
+                    <dd><%= folder.name %></dd>
+                </div>
+
+                <div class="vf-row">
+                    <dt><i class="bi bi-arrow-return-right"></i> Parent folder</dt>
+                    <dd>
+                        <% if (parentFolder) { %>
+                            <span class="vf-tag"><i class="bi bi-folder2-open"></i> <%= parentFolder.name %></span>
+                        <% } else { %>
+                            <span class="vf-muted">No parent folder</span>
+                        <% } %>
+                    </dd>
+                </div>
+
+                <div class="vf-row vf-row-top">
+                    <dt><i class="bi bi-people"></i> Users</dt>
+                    <dd>
+                        <% if (users.length) { %>
+                            <div class="vf-chips">
+                                <% users.forEach(username => { %>
+                                    <span class="vf-chip">
+                                        <span class="vf-avatar"><%= initials(username) %></span>
+                                        <%= username %>
+                                    </span>
+                                <% }) %>
+                            </div>
+                        <% } else { %>
+                            <span class="vf-muted">No users assigned</span>
+                        <% } %>
+                    </dd>
+                </div>
+            </dl>
+
+            <!-- Actions -->
+            <div class="vf-foot">
+                <a href="<%= appUrl %>folders" class="vf-btn vf-btn-primary">
+                    <i class="bi bi-arrow-left"></i> Back to folders
+                </a>
+             
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<style>
+    /* Surfaces follow the layout (light/dark); accent is fixed to #2f7d6f */
+    .vf-shell {
+        --vf-accent: #2f7d6f;
+        --vf-accent-dark: #256659;
+        --vf-accent-soft: #e4f1ee;
+
+        --vf-surface: var(--surface, #ffffff);
+        --vf-sunken:  var(--surface-2, #f7f9fb);
+        --vf-line:    var(--line, #e3e8ee);
+        --vf-text:    var(--ink, #14202b);
+        --vf-muted:   var(--ink-soft, #5b6b7a);
+        --vf-faint:   var(--ink-faint, #8a98a6);
+
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 0 1rem 2rem;
+        color: var(--vf-text);
+    }
+    [data-coreui-theme="dark"] .vf-shell { --vf-accent-soft: rgba(47, 125, 111, .24); }
+
+    /* Page header */
+    .vf-top { display: flex; align-items: center; gap: 1rem; margin: .25rem 0 1.5rem; }
+    .vf-page-title { margin: 0; font-size: 1.65rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+    .vf-page-sub { margin: .2rem 0 0; color: var(--vf-muted); font-size: .92rem; }
+    .vf-back { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--vf-line); background: var(--vf-surface); color: var(--vf-text); text-decoration: none; flex: none; transition: border-color .15s, color .15s; }
+    .vf-back:hover { border-color: var(--vf-accent); color: var(--vf-accent); }
+    .vf-back:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 2px; }
+
+    /* Card */
+    .vf-card { background: var(--vf-surface); border: 1px solid var(--vf-line); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(20,32,43,.04), 0 10px 30px -16px rgba(20,32,43,.14); }
+
+    /* Hero */
+    .vf-hero { display: flex; align-items: center; gap: 1.1rem; padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--vf-line); background: var(--vf-sunken); }
+    .vf-icon { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; background: var(--vf-accent); color: #fff; font-size: 1.6rem; flex: none; box-shadow: 0 8px 18px -8px rgba(47,125,111,.7); }
+    .vf-hero-text { min-width: 0; flex: 1; }
+    .vf-title { margin: 0; font-size: 1.35rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.25; word-break: break-word; }
+    .vf-path { margin: .35rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; color: var(--vf-muted); font-size: .88rem; }
+    .vf-path strong { color: var(--vf-text); font-weight: 600; }
+    .vf-sep { font-size: .7rem; color: var(--vf-faint); }
+    .vf-stat { text-align: center; padding: .55rem .95rem; border-radius: 12px; background: var(--vf-accent-soft); color: var(--vf-accent); flex: none; line-height: 1.1; }
+    [data-coreui-theme="dark"] .vf-stat { color: #8fd6c8; }
+    .vf-stat-num { display: block; font-size: 1.35rem; font-weight: 700; }
+    .vf-stat-label { font-size: .78rem; font-weight: 500; }
+
+    /* Details */
+    .vf-list { margin: 0; padding: 0; }
+    .vf-row { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 1.1rem 1.75rem; border-bottom: 1px solid var(--vf-line); align-items: center; }
+    .vf-row-top { align-items: start; }
+    .vf-row:last-child { border-bottom: 0; }
+    .vf-row dt { margin: 0; display: flex; align-items: center; gap: .55rem; font-weight: 500; color: var(--vf-muted); font-size: .9rem; }
+    .vf-row dt i { color: var(--vf-accent); font-size: 1rem; }
+    [data-coreui-theme="dark"] .vf-row dt i { color: #8fd6c8; }
+    .vf-row dd { margin: 0; font-weight: 500; word-break: break-word; }
+    .vf-muted { color: var(--vf-faint); font-weight: 400; }
+
+    .vf-tag { display: inline-flex; align-items: center; gap: .45rem; padding: .3rem .75rem; border-radius: 9px; background: var(--vf-sunken); border: 1px solid var(--vf-line); font-size: .9rem; }
+    .vf-tag i { color: var(--vf-accent); }
+
+    .vf-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .vf-chip { display: inline-flex; align-items: center; gap: .55rem; padding: 4px 13px 4px 4px; border-radius: 999px; background: var(--vf-sunken); border: 1px solid var(--vf-line); font-size: .875rem; }
+    .vf-avatar { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--vf-accent); color: #fff; font-size: .7rem; font-weight: 600; }
+
+    /* Footer + buttons */
+    .vf-foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: .6rem; padding: 1rem 1.75rem; background: var(--vf-sunken); border-top: 1px solid var(--vf-line); }
+    .vf-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 42px; padding: 0 1.15rem; border-radius: 10px; border: 1px solid transparent; font-weight: 600; font-size: .92rem; text-decoration: none; cursor: pointer; transition: background .15s, border-color .15s, color .15s, transform .1s; }
+    .vf-btn:active { transform: translateY(1px); }
+    .vf-btn:focus-visible { outline: 2px solid var(--vf-accent); outline-offset: 2px; }
+    .vf-btn-primary { background: var(--vf-accent); color: #fff; box-shadow: 0 1px 2px rgba(47,125,111,.4), 0 8px 16px -8px rgba(47,125,111,.6); }
+    .vf-btn-primary:hover { background: var(--vf-accent-dark); color: #fff; }
+    .vf-btn-ghost { background: var(--vf-surface); color: var(--vf-text); border-color: var(--vf-line); }
+    .vf-btn-ghost:hover { border-color: var(--vf-accent); color: var(--vf-accent); }
+
+    /* Small screens */
+    @media (max-width: 575.98px) {
+        .vf-page-title { font-size: 1.4rem; }
+        .vf-row { grid-template-columns: 1fr; gap: 6px; }
+        .vf-hero, .vf-row, .vf-foot { padding-left: 1.1rem; padding-right: 1.1rem; }
+        .vf-stat { display: none; }
+        .vf-foot .vf-btn { flex: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .vf-btn, .vf-back { transition: none; }
+    }
+</style>

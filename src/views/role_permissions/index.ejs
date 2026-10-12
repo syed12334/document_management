@@ -1,0 +1,290 @@
+<div class="body flex-grow-1">
+
+  <div class="container-lg px-4 py-4">
+
+    <% if (success) { %>
+      <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert" style="padding:10px 20px!important">
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <div><%= success %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" style="margin-top: 8px;
+    padding: 0px 20px 10px 0px !important;"></button>
+      </div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert" style="padding:10px 20px!important">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div><%= error %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" style="margin-top: 8px;
+    padding: 0px 20px 10px 0px !important;"></button>
+      </div>
+    <% } %>
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+      <div>
+        <h3 class="mb-0 fw-bold">Role & permissions</h3>
+        <!-- <small class="text-muted"><%= totalPermissions %> role & permission<%= totalPermissions === 1 ? '' : 's' %> total</small> -->
+      </div>
+ <% if (hasPermission('add-permission')) { %>
+      <a href="<%= appUrl %>role/permission/create" class="btn btn-primary d-flex align-items-center gap-2 fw-semibold shadow-sm">
+        <i class="bi bi-plus"></i> Add permission
+      </a>
+       <% } %>
+    </div>
+
+    <!-- Toolbar: search -->
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body py-3 d-flex flex-wrap align-items-center gap-2">
+          <div class="position-relative flex-grow-1" style="min-width:100px;">
+            <i class="bi bi-search position-absolute top-50 translate-middle-y ms-3 text-muted"></i>
+            <input
+              type="text"
+              name="search"
+              id="permissionSearch"
+              value="<%= search %>"
+              class="form-control ps-5"
+              placeholder="Search"
+              style="border-radius: 8px;width:300px"
+            >
+          </div>
+
+          <% if (search) { %>
+            <a href="<%= appUrl %>role/permission" class="btn btn-outline-dark">
+              <i class="bi bi-x-lg"></i> Clear
+            </a>
+          <% } %>
+
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-0">
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0" id="permissionLogsTableWrapper">
+
+            <thead class="table-light">
+              <tr>
+              <th>ID</th>
+                    <th>Role Name</th>
+                    <th>Permission Name</th>
+                    <th>Action</th>
+                    
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <% if (permissions.length === 0) { %>
+                <tr>
+                  <td colspan="6" class="text-center py-5 text-muted">
+                    <i class="bi bi-file-earmark-x fs-2 d-block mb-2"></i>
+                    <% if (search) { %>
+                      No role or permissions found for "<strong><%= search %></strong>".
+                    <% } else { %>
+                      No role or permissions found.
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+
+              <% permissions.forEach((permission, index) => { %>
+
+               
+
+                <tr>
+
+                  <td class="ps-4 text-muted"><%= (currentPage - 1) * limit + index + 1 %></td>
+
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                            <%= permission.role.name %>
+                    </div>
+                  </td>
+                   <td>
+                    <div class="d-flex align-items-center gap-2">
+                            <%= permission.permission.name %>
+                    </div>
+                  </td>
+
+                  
+
+                 
+
+                  <td class="text-end pe-4">
+                    <div class="d-inline-flex gap-1">
+
+<% if (hasPermission('edit-permission'))  { %>
+                      <a href="<%= appUrl %>role/permission/<%= permission.id %>/edit"
+                        class="btn btn-sm btn-warning text-white" title="Edit">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+<% } %>
+                     <% if (hasPermission('delete-permission'))  { %> 
+                  
+                            <a href="javascript:void(0);"
+  class="btn btn-sm btn-danger btn-delete-doc"
+  title="Delete"
+  data-id="<%= permission.id %>"
+  data-name="<%= permission.permission.name %>">
+  <i class="bi bi-trash"></i>
+</a> 
+                        <% } %> 
+
+
+              
+                      
+
+                    </div>
+                  </td>
+                
+
+                </tr>
+
+              <% }) %>
+
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+          <!-- Pagination -->
+               <% if (permissions.length > 0 && totalPermissions > 1) { %>
+               <div class="card-footer bg-white d-flex justify-content-between align-items-center py-3">
+
+          <small class="text-muted">
+            Page <%= currentPage %> of <%= totalPermissions %>
+          </small>
+                <nav >
+                    <ul class="pagination pagination-sm mb-0">
+                      <!-- Page Numbers -->
+<%
+    const pages = [];
+
+    if (totalPermissions <= 7) {
+        for (let i = 1; i <= totalPermissions; i++) {
+            pages.push(i);
+        }
+    } else {
+        pages.push(1);
+
+        if (currentPage > 4) {
+            pages.push('...');
+        }
+
+        const startPage = Math.max(2, currentPage - 1);
+        const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+        }
+
+        if (currentPage < totalPages - 3) {
+            pages.push('...');
+        }
+
+        pages.push(totalPages);
+    }
+%>
+ <!-- Previous -->
+                        <li class="page-item <%= !hasPreviousPage ? 'disabled' : '' %>">
+                            <% if (hasPreviousPage) { %>
+                                <a class="page-link" href="<%= appUrl %>role/permission?page=<%= previousPage %>&limit=<%= limit %>&search=<%= encodeURIComponent(search || '') %>">Previous</a>
+                            <% } else { %>
+                                <span class="page-link">Previous</span>
+                            <% } %>
+                        </li>
+<% pages.forEach(page => { %>
+    <% if (page === '...') { %>
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+    <% } else { %>
+        <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+            <a class="page-link"
+               href="<%= appUrl %>role/permission?page=<%= page %>&limit=<%= limit %>&search=<%= encodeURIComponent(search || '') %>">
+                <%= page %>
+            </a>
+        </li>
+    <% } %>
+<% }) %>
+   <!-- Next -->
+                        <li class="page-item <%= !hasNextPage ? 'disabled' : '' %>">
+                            <% if (hasNextPage) { %>
+                                <a class="page-link" href="<%= appUrl %>role/permission?page=<%= nextPage %>&limit=<%= limit %>&search=<%= encodeURIComponent(search || '') %>">Next</a>
+                            <% } else { %>
+                                <span class="page-link">Next</span>
+                            <% } %>
+                        </li>
+                    </ul>
+                </nav>
+                </div>
+                <% } %>
+                
+
+    </div>
+
+  </div>
+
+</div>
+<div id="searchPreloader" class="search-preloader">
+    <div class="text-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+
+        <div class="mt-2 fw-semibold">
+            Searching...
+        </div>
+    </div>
+</div>
+
+<style>
+   
+  
+    .search-preloader {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* background: rgba(255, 255, 255, 0.75); */
+        z-index: 9999;
+
+        align-items: center;
+        justify-content: center;
+    }
+
+    .search-preloader.active {
+        display: flex;
+    }
+</style>
+
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Permission</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete
+        <strong id="deleteDocName"></strong>? This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a type="button" class="btn btn-danger" id="confirmDeleteBtn">
+          <span class="spinner-border spinner-border-sm d-none me-1" id="deleteSpinner"></span>
+          Delete
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="<%= appUrl %>js/rolepermission.js">
+    </script>

@@ -1,0 +1,315 @@
+<%
+  const errs = (typeof errors !== 'undefined' && errors) ? errors : {};
+  const oldData = (typeof old !== 'undefined' && old) ? old : {};
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <meta name="description" content="Sign in to the Document Management System">
+  <title>Login</title>
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="<%= appUrl %>assets/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="<%= appUrl %>assets/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="<%= appUrl %>assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="<%= appUrl %>assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="<%= appUrl %>assets/favicon/manifest.json">
+  <meta name="theme-color" content="#0a1720">
+
+  <!-- Fonts & icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Main styles -->
+  <link href="<%= appUrl %>css/style.css" rel="stylesheet">
+  <script src="<%= appUrl %>js/config.js"></script>
+  <script src="<%= appUrl %>js/color-modes.js"></script>
+
+  <style>
+    :root {
+      --lg-font: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --lg-accent: #2f7d6f;
+      --lg-accent-dark: #256659;
+      --lg-accent-soft: #e4f1ee;
+
+      --lg-bg: #ffffff;
+      --lg-field: #f7f9fb;
+      --lg-line: #dfe5eb;
+      --lg-text: #14202b;
+      --lg-muted: #5b6b7a;
+      --lg-faint: #8a98a6;
+      --lg-danger: #d0342c;
+      --lg-danger-bg: #fdeced;
+      --lg-danger-line: #f3c3c7;
+
+      --lg-side: #0a1720;
+    }
+    [data-coreui-theme="dark"] {
+      --lg-accent-soft: rgba(47, 125, 111, .24);
+      --lg-bg: #0f1a22;
+      --lg-field: #16232d;
+      --lg-line: #253440;
+      --lg-text: #e8eef3;
+      --lg-muted: #9fb0be;
+      --lg-faint: #6e8090;
+      --lg-danger: #ff8a82;
+      --lg-danger-bg: #2c1416;
+      --lg-danger-line: #7a2d31;
+      --lg-side: #071118;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--lg-font); background: var(--lg-bg); color: var(--lg-text); -webkit-font-smoothing: antialiased; }
+    :focus-visible { outline: 2px solid var(--lg-accent); outline-offset: 2px; }
+
+    .lg { min-height: 100vh; display: grid; grid-template-columns: minmax(360px, 46%) 1fr; }
+
+    /* ---------------- Brand panel ---------------- */
+    .lg-side {
+      position: relative;
+      overflow: hidden;
+      background: var(--lg-side);
+      color: #c5d3dd;
+      padding: 3rem 3.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .lg-side::before {
+      content: '';
+      position: absolute;
+      width: 520px; height: 520px;
+      right: -180px; bottom: -200px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(47,125,111,.55), rgba(47,125,111,0) 68%);
+      pointer-events: none;
+    }
+    .lg-side::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, transparent, #000 40%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%, transparent);
+      pointer-events: none;
+    }
+    .lg-side > * { position: relative; z-index: 1; }
+
+    .lg-brand { display: flex; align-items: center; gap: .85rem; color: #fff; font-weight: 700; font-size: 1.05rem; }
+    .lg-brand img { width: 46px; height: 46px; padding: 6px; object-fit: contain; background: #fff; border-radius: 12px; }
+
+    .lg-pitch h2 { margin: 0 0 1rem; color: #fff; font-size: 2.15rem; line-height: 1.18; font-weight: 700; letter-spacing: -.025em; max-width: 16ch; }
+    .lg-pitch p { margin: 0 0 2rem; max-width: 38ch; font-size: 1rem; line-height: 1.6; }
+    .lg-points { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .9rem; }
+    .lg-points li { display: flex; align-items: center; gap: .8rem; font-size: .95rem; color: #dbe6ee; }
+    .lg-points i { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: rgba(60,196,187,.14); color: #7ee3db; font-size: 1rem; flex: none; }
+
+    .lg-copy { font-size: .82rem; opacity: .6; }
+
+    /* ---------------- Form panel ---------------- */
+    .lg-main { position: relative; display: flex; align-items: center; justify-content: center; padding: 2.5rem 1.5rem; }
+    .lg-card { width: 100%; max-width: 400px; }
+
+    .lg-mobile-logo { display: none; align-items: center; gap: .7rem; margin-bottom: 2rem; font-weight: 700; }
+    .lg-mobile-logo img { width: 42px; height: 42px; object-fit: contain; }
+
+    .lg-title { margin: 0; font-size: 1.75rem; font-weight: 700; letter-spacing: -.025em; line-height: 1.2; }
+    .lg-sub { margin: .45rem 0 1.75rem; color: var(--lg-muted); font-size: .95rem; }
+
+    .lg-alert { display: flex; align-items: flex-start; gap: .6rem; padding: .75rem .95rem; margin-bottom: 1.25rem; border-radius: 12px; border: 1px solid var(--lg-danger-line); background: var(--lg-danger-bg); color: var(--lg-danger); font-size: .9rem; }
+    .lg-alert i { margin-top: .1rem; }
+
+    .lg-form { display: flex; flex-direction: column; gap: 1.2rem; }
+    .lg-label { display: block; margin-bottom: .45rem; font-size: .88rem; font-weight: 600; }
+
+    .lg-input-wrap { position: relative; }
+    .lg-input-wrap > i.lg-lead { position: absolute; left: .95rem; top: 50%; transform: translateY(-50%); color: var(--lg-faint); pointer-events: none; }
+    .lg-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 2.9rem 0 2.6rem;
+      border-radius: 11px;
+      border: 1px solid var(--lg-line);
+      background: var(--lg-field);
+      color: var(--lg-text);
+      font: inherit;
+      font-size: .95rem;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+    .lg-input::placeholder { color: var(--lg-faint); }
+    .lg-input:focus { outline: 0; background: var(--lg-bg); border-color: var(--lg-accent); box-shadow: 0 0 0 3px rgba(47,125,111,.2); }
+    .lg-input.is-invalid { border-color: var(--lg-danger); }
+    .lg-input.is-invalid:focus { box-shadow: 0 0 0 3px rgba(208,52,44,.18); }
+
+    .lg-toggle { position: absolute; right: .4rem; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border: 0; border-radius: 9px; background: transparent; color: var(--lg-faint); cursor: pointer; display: grid; place-items: center; font-size: 1.05rem; }
+    .lg-toggle:hover { color: var(--lg-accent); background: var(--lg-accent-soft); }
+
+    .lg-error { margin-top: .4rem; display: flex; align-items: center; gap: .35rem; color: var(--lg-danger); font-size: .84rem; }
+
+    .lg-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: .55rem;
+      width: 100%; height: 48px; margin-top: .3rem;
+      border: 0; border-radius: 11px;
+      background: var(--lg-accent); color: #fff;
+      font: inherit; font-weight: 600; font-size: .98rem;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(47,125,111,.4), 0 10px 20px -10px rgba(47,125,111,.7);
+      transition: background .15s, transform .1s;
+    }
+    .lg-btn:hover { background: var(--lg-accent-dark); }
+    .lg-btn:active { transform: translateY(1px); }
+    .lg-btn:disabled { opacity: .75; cursor: progress; }
+    .lg-spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: lg-spin .7s linear infinite; display: none; }
+    .lg-btn.is-loading .lg-spinner { display: inline-block; }
+    @keyframes lg-spin { to { transform: rotate(360deg); } }
+
+    .lg-foot { margin-top: 2rem; text-align: center; font-size: .82rem; color: var(--lg-faint); }
+
+    /* ---------------- Responsive ---------------- */
+    @media (max-width: 899.98px) {
+      .lg { grid-template-columns: 1fr; }
+      .lg-side { display: none; }
+      .lg-mobile-logo { display: flex; }
+      .lg-main { align-items: flex-start; padding-top: 3.5rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lg-input, .lg-btn { transition: none; }
+      .lg-spinner { animation-duration: 1.6s; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="lg">
+
+    <!-- Brand panel -->
+    <aside class="lg-side" aria-hidden="false">
+      <div class="lg-brand">
+        <img src="<%= appUrl %>assets/img/logo.png" alt="Logo">
+        <span>Document Management</span>
+      </div>
+
+      <div class="lg-pitch">
+        <h2>All your documents in one place.</h2>
+        <p>Organize files into folders, decide who can open them, and keep a record of every change.</p>
+        <ul class="lg-points">
+          <li><i class="bi bi-folder2-open"></i> Folders you can nest and share</li>
+          <li><i class="bi bi-shield-lock"></i> Access set per user and role</li>
+          <li><i class="bi bi-clipboard-data"></i> Audit logs for every action</li>
+        </ul>
+      </div>
+
+      <div class="lg-copy">&copy; <script>document.write(new Date().getFullYear())</script> Document Management System</div>
+    </aside>
+
+    <!-- Form panel -->
+    <main class="lg-main">
+      <div class="lg-card">
+
+        <div class="lg-mobile-logo">
+          <img src="<%= appUrl %>assets/img/logo.png" alt="Logo">
+          <span>Document Management</span>
+        </div>
+
+        <h1 class="lg-title">Sign in</h1>
+        <p class="lg-sub">Enter your email and password to open your account.</p>
+
+        <% if (errs.invalid) { %>
+          <div class="lg-alert" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <span><%= errs.invalid %></span>
+          </div>
+        <% } %>
+
+        <form class="lg-form" method="POST" id="loginForm" action="/login/authenticate" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <!-- Email -->
+          <div>
+            <label class="lg-label" for="email">Email address</label>
+            <div class="lg-input-wrap">
+              <i class="bi bi-envelope lg-lead"></i>
+              <input class="lg-input <%= errs.email ? 'is-invalid' : '' %>"
+                     id="email" type="email" name="email"
+                     value="<%= oldData.email ? oldData.email : '' %>"
+                     placeholder="your@email.com" autocomplete="off" autofocus>
+            </div>
+            <% if (errs.email) { %>
+              <div class="lg-error"><i class="bi bi-exclamation-circle"></i> <%= errs.email %></div>
+            <% } %>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label class="lg-label" for="password">Password</label>
+            <div class="lg-input-wrap">
+              <i class="bi bi-lock lg-lead"></i>
+              <input class="lg-input <%= errs.password ? 'is-invalid' : '' %>"
+                     id="password" type="password" name="password"
+                     placeholder="Your password" autocomplete="off">
+              <button type="button" class="lg-toggle" id="togglePassword" aria-label="Show password" aria-pressed="false">
+                <i class="bi bi-eye"></i>
+              </button>
+            </div>
+            <% if (errs.password) { %>
+              <div class="lg-error"><i class="bi bi-exclamation-circle"></i> <%= errs.password %></div>
+            <% } %>
+          </div>
+
+          <!-- Submit -->
+          <button class="lg-btn" type="submit" id="loginBtn">
+            <span class="lg-spinner" aria-hidden="true"></span>
+            <span id="loginBtnText">Sign in</span>
+          </button>
+        </form>
+
+        <p class="lg-foot">Trouble signing in? Contact your administrator.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- CoreUI and necessary plugins -->
+  <script src="<%= appUrl %>vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
+  <script src="<%= appUrl %>js/login.js"></script>
+
+  <script>
+    (function () {
+      // Show / hide password
+      var pwd = document.getElementById('password');
+      var toggle = document.getElementById('togglePassword');
+      toggle.addEventListener('click', function () {
+        var show = pwd.type === 'password';
+        pwd.type = show ? 'text' : 'password';
+        toggle.setAttribute('aria-pressed', show);
+        toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        toggle.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+        pwd.focus();
+      });
+
+      // Loading state on submit (prevents double submits)
+      var form = document.getElementById('loginForm');
+      var btn = document.getElementById('loginBtn');
+      form.addEventListener('submit', function () {
+        btn.disabled = true;
+        btn.classList.add('is-loading');
+        document.getElementById('loginBtnText').textContent = 'Signing in…';
+      });
+
+      // Restore the button if the page is shown again from the back/forward cache
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) {
+          btn.disabled = false;
+          btn.classList.remove('is-loading');
+          document.getElementById('loginBtnText').textContent = 'Sign in';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

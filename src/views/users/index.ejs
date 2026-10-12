@@ -1,0 +1,384 @@
+<div class="body flex-grow-1">
+  <div class="container-xl px-0 fx">
+
+    <!-- Flash messages -->
+    <% if (success) { %>
+      <div class="alert fx-flash fx-flash-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <div class="flex-grow-1"><%= success %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" data-coreui-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+    <% if (error) { %>
+      <div class="alert fx-flash fx-flash-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <div class="flex-grow-1"><%= error %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" data-coreui-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>
+
+    <!-- Page header -->
+    <header class="fx-head">
+      <div class="fx-head-text">
+        <h1 class="fx-title">Users</h1>
+        <p class="fx-sub">
+          <span class="fx-count"><%= totalUsers %></span>
+          user<%= totalUsers === 1 ? '' : 's' %> in total
+          <% if (search) { %> &nbsp;|&nbsp; filtered by "<strong><%= search %></strong>"<% } %>
+        </p>
+      </div>
+      <% if (hasPermission('add-user')) { %>
+        <a href="<%= appUrl %>users/create" class="fx-btn fx-btn-primary">
+          <i class="bi bi-folder-plus"></i> Add user
+        </a>
+      <% } %>
+    </header>
+
+    <!-- Table card -->
+    <section class="fx-card">
+
+      <!-- Toolbar -->
+      <div class="fx-toolbar">
+        <div class="fx-search">
+          <i class="bi bi-search"></i>
+          <input type="text" name="search" id="userModule" value="<%= search %>"
+                 class="form-control" placeholder="Search user by name" autocomplete="off" aria-label="Search folders">
+        </div>
+        <% if (search) { %>
+          <a href="<%= appUrl %>users" class="fx-btn fx-btn-ghost">
+            <i class="bi bi-x-lg"></i> Clear search
+          </a>
+        <% } %>
+      </div>
+
+      <%
+        const canView   = hasPermission('view-user');
+        const canEdit   = hasPermission('edit-user');
+        const canDelete = hasPermission('delete-user');
+        const showActions = canView || canEdit || canDelete;
+        const colCount = showActions ? 5 : 4;
+      %>
+
+      <div class="table-responsive">
+        <table class="table align-middle mb-0 fx-table folders-table" id="userLogsTableWrapper">
+          <thead>
+            <tr>
+              <th class="fx-num">#</th>
+               <th>User Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              <% if (showActions) { %><th class="text-end">Actions</th><% } %>
+            </tr>
+          </thead>
+          <tbody>
+
+            <% if (users.length === 0) { %>
+              <tr class="fx-empty-row">
+                <td colspan="<%= colCount %>">
+                  <div class="fx-empty">
+                    <div class="fx-empty-icon"><i class="bi bi-folder2-open"></i></div>
+                    <% if (search) { %>
+                      <h6>No users match your search</h6>
+                      <p>Nothing found for "<strong><%= search %></strong>". Check the spelling or try a shorter name.</p>
+                      <a href="<%= appUrl %>folders" class="fx-btn fx-btn-ghost mt-3"><i class="bi bi-x-lg"></i> Clear search</a>
+                    <% } else { %>
+                      <h6>No folders yet</h6>
+                      <p>Create your first user to start organizing documents.</p>
+                      <% if (hasPermission('add-user')) { %>
+                        <a href="<%= appUrl %>users/create" class="fx-btn fx-btn-primary mt-3"><i class="bi bi-person"></i> Add user</a>
+                      <% } %>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+            <% } %>
+
+            <% users.forEach((user, index) => {
+              
+            %>
+              <tr>
+                <td class="fx-num"><%= (currentPage - 1) * limit + index + 1 %></td>
+
+               
+
+                <td>
+                  <i class="bi bi-person"></i>
+                   <%= user.username %>
+                </td>
+                   <td>
+                    <%= user.email %>
+                  </td>
+                   <td>
+                    <% if (user.role) { %>
+                      <%= user.role.name %>
+                    <% } else { %>
+                      <span class="text-muted">—</span>
+                    <% } %>
+                  </td>
+
+             
+
+                <% if (showActions) { %>
+                <td class="text-end">
+                  <div class="fx-actions">
+                   
+                    <% if (canEdit) { %>
+                      <a href="<%= appUrl %>users/<%= user.id %>/edit" class="fx-act fx-act-edit" title="Edit" aria-label="Edit <%= user.username %>">
+                        <i class="bi bi-pencil"></i><span>Edit</span>
+                      </a>
+                    <% } %>
+                    <% if (canDelete) { %>
+                      <a href="javascript:void(0);" class="fx-act fx-act-delete btn-delete-doc" title="Delete"
+                         aria-label="Delete <%= user.username %>"
+                         data-id="<%= user.id %>" data-name="<%= user.username %>">
+                        <i class="bi bi-trash"></i><span>Delete</span>
+                      </a>
+                    <% } %>
+                  </div>
+                </td>
+                <% } %>
+              </tr>
+            <% }) %>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <% if (users.length > 0 && totalPages > 1) { %>
+        <%
+          const pages = [];
+          if (totalPages <= 7) {
+            for (let i = 1; i <= totalPages; i++) pages.push(i);
+          } else {
+            pages.push(1);
+            if (currentPage > 4) pages.push('...');
+            const startPage = Math.max(2, currentPage - 1);
+            const endPage = Math.min(totalPages - 1, currentPage + 1);
+            for (let i = startPage; i <= endPage; i++) pages.push(i);
+            if (currentPage < totalPages - 3) pages.push('...');
+            pages.push(totalPages);
+          }
+          const qs = (p) => `${appUrl}users?page=${p}&limit=${limit}&search=${encodeURIComponent(search || '')}`;
+          const from = (currentPage - 1) * limit + 1;
+          const to = (currentPage - 1) * limit + users.length;
+        %>
+        <div class="fx-footer">
+          <span class="fx-range">Showing <strong><%= from %></strong> to <strong><%= to %></strong> of <strong><%= totalUsers %></strong></span>
+          <nav aria-label="Folder pages">
+            <ul class="pagination fx-pagination mb-0">
+              <li class="page-item <%= !hasPreviousPage ? 'disabled' : '' %>">
+                <% if (hasPreviousPage) { %>
+                  <a class="page-link" href="<%= qs(previousPage) %>" aria-label="Previous page"><i class="bi bi-chevron-left"></i></a>
+                <% } else { %>
+                  <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                <% } %>
+              </li>
+
+              <% pages.forEach(page => { %>
+                <% if (page === '...') { %>
+                  <li class="page-item disabled"><span class="page-link">&hellip;</span></li>
+                <% } else { %>
+                  <li class="page-item <%= currentPage === page ? 'active' : '' %>">
+                    <a class="page-link" href="<%= qs(page) %>" <%= currentPage === page ? 'aria-current="page"' : '' %>><%= page %></a>
+                  </li>
+                <% } %>
+              <% }) %>
+
+              <li class="page-item <%= !hasNextPage ? 'disabled' : '' %>">
+                <% if (hasNextPage) { %>
+                  <a class="page-link" href="<%= qs(nextPage) %>" aria-label="Next page"><i class="bi bi-chevron-right"></i></a>
+                <% } else { %>
+                  <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                <% } %>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      <% } %>
+
+    </section>
+  </div>
+</div>
+
+<!-- Search preloader -->
+<div id="searchPreloader" class="fx-preloader search-preloader">
+  <div class="fx-loader-card loader-card">
+    <div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+    <div class="mt-2 fw-semibold">Searching&hellip;</div>
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content fx-modal">
+      <div class="modal-body text-center p-4 pb-3">
+        <div class="fx-danger-badge"><i class="bi bi-trash3"></i></div>
+        <h5 class="fw-bold mb-2">Delete this user?</h5>
+        <p class="fx-modal-text mb-0">
+          You're about to delete <strong id="deleteDocName"></strong>.
+          This can't be undone.
+        </p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center gap-2 pt-2 pb-4">
+        <button type="button" class="fx-btn fx-btn-ghost" data-bs-dismiss="modal" data-coreui-dismiss="modal">Cancel</button>
+        <a role="button" class="fx-btn fx-btn-danger" id="confirmDeleteBtn">
+          <span class="spinner-border spinner-border-sm d-none" id="deleteSpinner"></span>
+          Delete user
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ------------------------------------------------------------
+     Tokens. Surfaces follow the layout (light/dark);
+     the accent is fixed to #2f7d6f.
+  ------------------------------------------------------------ */
+  .fx, .fx-modal, .fx-loader-card {
+    --fx-accent:       #2f7d6f;
+    --fx-accent-dark:  #256659;
+    --fx-accent-soft:  #e4f1ee;
+    --fx-accent-row:   #f1f8f6;
+
+    --fx-bg:     var(--surface, #ffffff);
+    --fx-sunken: var(--surface-2, #f7f9fb);
+    --fx-line:   var(--line, #e3e8ee);
+    --fx-text:   var(--ink, #14202b);
+    --fx-muted:  var(--ink-soft, #5b6b7a);
+  }
+  [data-coreui-theme="dark"] .fx,
+  [data-coreui-theme="dark"] .fx-modal,
+  [data-coreui-theme="dark"] .fx-loader-card {
+    --fx-accent-soft: rgba(47, 125, 111, .22);
+    --fx-accent-row:  rgba(47, 125, 111, .10);
+  }
+  .fx { color: var(--fx-text); }
+
+  /* Flash */
+  .fx-flash { display:flex; align-items:center; gap:.75rem; border:1px solid; border-left-width:4px; border-radius:12px; padding:.8rem 1rem; margin-bottom:1.25rem; }
+  .fx-flash .btn-close { position:static; padding:.5rem; }
+  .fx-flash-success { background:#ecf7f4; border-color:#b5dcd4; color:#1f5c52; }
+  .fx-flash-danger  { background:#fff1f0; border-color:#f3b8b4; color:#b42318; }
+  [data-coreui-theme="dark"] .fx-flash-success { background:#0f2622; border-color:#2f7d6f; color:#8fd6c8; }
+  [data-coreui-theme="dark"] .fx-flash-danger  { background:#2c1416; border-color:#7a2d31; color:#ff9c95; }
+
+  /* Header */
+  .fx-head { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:1rem; margin-bottom:1.25rem; }
+  .fx-title { font-size:1.75rem; font-weight:700; letter-spacing:-.025em; line-height:1.15; margin:0; }
+  .fx-sub { margin:.3rem 0 0; color:var(--fx-muted); font-size:.92rem; }
+  .fx-count { display:inline-block; min-width:1.7em; padding:.05rem .55rem; margin-right:.2rem; border-radius:999px; background:var(--fx-accent-soft); color:var(--fx-accent); font-weight:700; text-align:center; }
+  [data-coreui-theme="dark"] .fx-count { color:#8fd6c8; }
+
+  /* Buttons */
+  .fx-btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; height:42px; padding:0 1.15rem; border-radius:10px; border:1px solid transparent; font-weight:600; font-size:.92rem; text-decoration:none; cursor:pointer; transition:background .15s, border-color .15s, box-shadow .15s, transform .1s; }
+  .fx-btn:active { transform:translateY(1px); }
+  .fx-btn:focus-visible { outline:2px solid var(--fx-accent); outline-offset:2px; }
+  .fx-btn-primary { background:var(--fx-accent); color:#fff; box-shadow:0 1px 2px rgba(47,125,111,.4), 0 6px 14px -6px rgba(47,125,111,.55); }
+  .fx-btn-primary:hover { background:var(--fx-accent-dark); color:#fff; }
+  .fx-btn-ghost { background:var(--fx-bg); color:var(--fx-text); border-color:var(--fx-line); }
+  .fx-btn-ghost:hover { background:var(--fx-sunken); border-color:var(--fx-accent); color:var(--fx-accent); }
+  .fx-btn-danger { background:#d0342c; color:#fff; }
+  .fx-btn-danger:hover { background:#b12a23; color:#fff; }
+
+  /* Card + toolbar */
+  .fx-card { background:var(--fx-bg); border:1px solid var(--fx-line); border-radius:16px; overflow:hidden; box-shadow:0 1px 2px rgba(20,32,43,.04), 0 10px 30px -14px rgba(20,32,43,.14); }
+  .fx-toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; padding:1rem 1.25rem; border-bottom:1px solid var(--fx-line); }
+  .fx-search { position:relative; flex:1 1 280px; max-width:420px; }
+  .fx-search i { position:absolute; left:.95rem; top:50%; transform:translateY(-50%); color:var(--fx-muted); pointer-events:none; }
+  .fx-search .form-control { height:42px; padding-left:2.5rem; border-radius:10px; background:var(--fx-sunken); border:1px solid transparent; color:var(--fx-text); }
+  .fx-search .form-control:focus { background:var(--fx-bg); border-color:var(--fx-accent); box-shadow:0 0 0 3px var(--fx-accent-soft); }
+
+  /* Table: solid #2f7d6f header, soft green row hover */
+  .fx-table { --cui-table-bg:transparent; --bs-table-bg:transparent; color:var(--fx-text); }
+  .fx-table thead th { padding:.9rem 1rem; background:var(--fx-accent); color:#fff; font-size:.84rem; font-weight:600; white-space:nowrap; border:0; }
+  .fx-table tbody td { padding:.95rem 1rem; border-bottom:1px solid var(--fx-line); background:transparent; color:var(--fx-text); }
+  .fx-table tbody tr:last-child td { border-bottom:0; }
+  .fx-table tbody tr { transition:background .12s; }
+  .fx-table tbody tr:not(.fx-empty-row):hover { background:var(--fx-accent-row); }
+  .fx-table tbody tr:not(.fx-empty-row):hover td { box-shadow:none; }
+  .fx-table tbody tr:not(.fx-empty-row):hover td:first-child { box-shadow:inset 3px 0 0 var(--fx-accent); }
+  .fx-table th:first-child, .fx-table td:first-child { padding-left:1.25rem; }
+  .fx-table th:last-child, .fx-table td:last-child { padding-right:1.25rem; }
+  .fx-num { width:64px; font-variant-numeric:tabular-nums; }
+  .fx-table tbody .fx-num { color:var(--fx-muted); }
+  .fx-none { color:var(--fx-muted); font-size:.88rem; }
+
+  /* Folder cell */
+  .fx-folder { display:flex; align-items:center; gap:.85rem; }
+  .fx-folder-icon { display:inline-grid; place-items:center; width:40px; height:40px; border-radius:11px; background:var(--fx-accent-soft); color:var(--fx-accent); font-size:1.2rem; flex:none; }
+  [data-coreui-theme="dark"] .fx-folder-icon { color:#8fd6c8; }
+  .fx-folder-name { font-weight:600; letter-spacing:-.005em; }
+
+  /* Parent tag */
+  .fx-tag { display:inline-flex; align-items:center; gap:.4rem; padding:.28rem .7rem; border-radius:8px; font-size:.84rem; background:var(--fx-sunken); border:1px solid var(--fx-line); }
+  .fx-tag i { color:var(--fx-accent); }
+
+  /* Users */
+  .fx-users { display:flex; align-items:center; gap:.65rem; }
+  .fx-avatars { display:flex; }
+  .fx-avatar { display:inline-grid; place-items:center; width:30px; height:30px; margin-left:-8px; border-radius:50%; border:2px solid var(--fx-bg); font-size:.75rem; font-weight:700; color:#fff; }
+  .fx-avatars .fx-avatar:first-child { margin-left:0; }
+  .fx-av-0 { background:#2f7d6f; }
+  .fx-av-1 { background:#4a9c8c; }
+  .fx-av-2 { background:#1f5c52; }
+  .fx-av-more { background:var(--fx-sunken); color:var(--fx-muted); box-shadow:inset 0 0 0 1px var(--fx-line); }
+  .fx-user-names { color:var(--fx-muted); font-size:.86rem; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  /* Row actions: icon buttons, label reveals on hover/focus */
+  .fx-actions { display:inline-flex; gap:.4rem; }
+  .fx-act { display:inline-flex; align-items:center; gap:0; height:34px; padding:0 .55rem; border-radius:9px; border:1px solid var(--fx-line); background:var(--fx-bg); color:var(--fx-muted); text-decoration:none; font-size:.82rem; font-weight:600; transition:background .15s, color .15s, border-color .15s; }
+  .fx-act span { max-width:0; overflow:hidden; white-space:nowrap; transition:max-width .2s ease, margin .2s ease; }
+  .fx-act:hover span, .fx-act:focus-visible span { max-width:60px; margin-left:.4rem; }
+  .fx-act:focus-visible { outline:2px solid var(--fx-accent); outline-offset:2px; }
+  .fx-act-view:hover, .fx-act-view:focus-visible     { background:var(--fx-accent); color:#fff; border-color:var(--fx-accent); }
+  .fx-act-edit:hover, .fx-act-edit:focus-visible     { background:#fef3c7; color:#a24a0a; border-color:#fde68a; }
+  .fx-act-delete:hover, .fx-act-delete:focus-visible { background:#fee2e2; color:#b91c1c; border-color:#fecaca; }
+
+  /* Empty state */
+  .fx-empty { text-align:center; padding:3.5rem 1rem; color:var(--fx-muted); }
+  .fx-empty-icon { display:inline-grid; place-items:center; width:68px; height:68px; border-radius:20px; background:var(--fx-accent-soft); color:var(--fx-accent); font-size:1.9rem; margin-bottom:1rem; }
+  .fx-empty h6 { color:var(--fx-text); font-weight:700; margin-bottom:.3rem; }
+  .fx-empty p { margin:0 auto; max-width:38ch; }
+
+  /* Footer + pagination */
+  .fx-footer { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:.75rem; padding:.9rem 1.25rem; border-top:1px solid var(--fx-line); background:var(--fx-sunken); }
+  .fx-range { color:var(--fx-muted); font-size:.86rem; }
+  .fx-range strong { color:var(--fx-text); }
+  .fx-pagination { gap:.25rem; }
+  .fx-pagination .page-link { min-width:36px; height:36px; display:inline-grid; place-items:center; padding:0 .5rem; border-radius:9px !important; border:1px solid transparent; background:transparent; color:var(--fx-text); font-weight:500; }
+  .fx-pagination .page-link:hover { background:var(--fx-bg); border-color:var(--fx-accent); color:var(--fx-accent); }
+  .fx-pagination .page-item.active .page-link { background:var(--fx-accent); border-color:var(--fx-accent); color:#fff; }
+  .fx-pagination .page-item.disabled .page-link { color:var(--fx-muted); opacity:.55; background:transparent; }
+
+  /* Delete modal */
+  .fx-modal { border:1px solid var(--fx-line); border-radius:18px; background:var(--fx-bg); color:var(--fx-text); box-shadow:0 24px 60px rgba(10,23,32,.3); }
+  .fx-modal-text { color:var(--fx-muted); }
+  .fx-danger-badge { display:inline-grid; place-items:center; width:60px; height:60px; border-radius:50%; background:#fee2e2; color:#d0342c; font-size:1.6rem; margin-bottom:1rem; box-shadow:0 0 0 8px #fef2f2; }
+  [data-coreui-theme="dark"] .fx-danger-badge { background:#3a1a1c; box-shadow:0 0 0 8px #2a1315; color:#ff8a82; }
+  #confirmDeleteBtn .spinner-border { margin-right:.1rem; }
+
+  /* Search preloader (IDs/classes kept for folder.js) */
+  .search-preloader { display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(255,255,255,0); }
+  [data-coreui-theme="dark"] .search-preloader { background:rgba(10,20,26,.6); }
+  .search-preloader.active { display:flex; }
+  .loader-card { text-align:center; padding:1.25rem 1.75rem; border-radius:14px; background:var(--fx-bg); color:var(--fx-text); border:1px solid var(--fx-line); box-shadow:0 10px 34px rgba(10,23,32,.16); }
+  .loader-card .spinner-border { color:var(--fx-accent); }
+
+  /* Small screens */
+  @media (max-width: 767.98px) {
+    .fx-title { font-size:1.45rem; }
+    .fx-head .fx-btn { width:100%; }
+    .fx-search { max-width:none; }
+    .fx-user-names { display:none; }
+    .fx-act span { display:none; }
+    .fx-footer { justify-content:center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fx-btn, .fx-act, .fx-act span, .fx-table tbody tr { transition:none; }
+  }
+</style>
+
+<script src="<%= appUrl %>js/userModule.js"></script>

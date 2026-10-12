@@ -1,0 +1,23 @@
+<div class="container py-5 text-center">
+  <h1 class="display-1 fw-bold">
+    <%= statusCode %>
+  </h1>
+
+  <h2 class="mb-3">
+    <%= message %>
+  </h2>
+
+  <% if (details && details.length) { %>
+    <div class="alert alert-danger text-start">
+      <ul class="mb-0">
+        <% details.forEach((detail) => { %>
+          <li><%= detail %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+
+  <a href="/" class="btn btn-primary">
+    Go to Dashboard
+  </a>
+</div>

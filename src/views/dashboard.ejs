@@ -1,0 +1,167 @@
+<%
+  const stats = [
+    { perm: 'view-folder',   label: 'Folders',   value: typeof folderCount   !== 'undefined' ? folderCount   : 0, icon: 'bi-folder2',           href: 'folders/',  chart: 'card-chart1', tone: 'blue'  },
+    { perm: 'view-document', label: 'Documents', value: typeof documentCount !== 'undefined' ? documentCount : 0, icon: 'bi-file-earmark-text', href: 'documents', chart: 'card-chart2', tone: 'teal'  },
+    { perm: 'view-role',     label: 'Roles',     value: typeof roleCount     !== 'undefined' ? roleCount     : 0, icon: 'bi-shield-lock',       href: 'roles',     chart: 'card-chart3', tone: 'amber' },
+    { perm: 'view-user',     label: 'Users',     value: typeof userCount     !== 'undefined' ? userCount     : 0, icon: 'bi-people',            href: 'users',     chart: 'card-chart4', tone: 'rose'  }
+  ];
+  const visible = stats.filter(s => hasPermission(s.perm));
+%>
+
+<div class="dash">
+  <div class="container-xxl px-0">
+
+    <div class="dash-head">
+      <h2 class="dash-heading">Overview</h2>
+      <p class="dash-sub">What's in your workspace right now.</p>
+    </div>
+
+    <% if (visible.length === 0) { %>
+      <div class="dash-empty">
+        <i class="bi bi-grid-1x2"></i>
+        <p class="dash-empty-title">Nothing to show yet</p>
+        <p class="dash-empty-text">Ask an administrator to give your account access to folders, documents, roles or users.</p>
+      </div>
+    <% } else { %>
+
+      <div class="row g-3 g-xl-4 mb-4">
+        <% visible.forEach(s => { %>
+          <div class="col-sm-6 col-xl-3">
+            <a class="dash-tile dash-<%= s.tone %>" href="<%= appUrl %><%= s.href %>" aria-label="Open <%= s.label %>">
+
+              <div class="dash-tile-head">
+                <span class="dash-chip"><i class="bi <%= s.icon %>"></i></span>
+                <span class="dash-open"><i class="bi bi-arrow-up-right"></i></span>
+              </div>
+
+              <div class="dash-tile-body">
+                <div class="dash-value"><%= Number(s.value).toLocaleString() %></div>
+                <div class="dash-label"><%= s.label %></div>
+              </div>
+
+              <div class="dash-chart c-chart-wrapper">
+                <canvas class="chart" id="<%= s.chart %>" height="70"></canvas>
+              </div>
+
+            </a>
+          </div>
+        <% }) %>
+      </div>
+
+    <% } %>
+
+  </div>
+</div>
+
+<style>
+  .dash {
+    --tile-bg: #151927;
+    --tile-line: rgba(255, 255, 255, .08);
+    --tile-ink: #ffffff;
+    --tile-soft: #a5adc4;
+    --dash-ink: var(--ink, #181b26);
+    --dash-soft: var(--ink-soft, #596074);
+    --dash-surface: var(--surface, #fff);
+    --dash-line: var(--line, #e6e8ef);
+    --dash-radius: var(--radius, 16px);
+  }
+  [data-coreui-theme="dark"] .dash { --tile-bg: #1b2030; }
+
+  /* Heading */
+  .dash-head { margin: 0 0 20px; }
+  .dash-heading { font-size: 1.35rem; font-weight: 800; letter-spacing: -.02em; margin: 0; color: var(--dash-ink); }
+  .dash-sub { margin: 4px 0 0; font-size: .9rem; color: var(--dash-soft); }
+
+  /* Tile */
+  .dash-tile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--tile-bg);
+    border: 1px solid var(--tile-line);
+    border-radius: 20px;
+    color: var(--tile-ink);
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .dash-tile:hover,
+  .dash-tile:focus-visible {
+    color: var(--tile-ink);
+    border-color: var(--tone);
+    box-shadow: 0 0 0 1px var(--tone), 0 12px 28px -14px var(--tone);
+  }
+
+  .dash-tile-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 18px 0;
+  }
+  .dash-chip {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    color: #fff;
+    background: var(--tone);
+  }
+  .dash-open {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .95rem;
+    color: var(--tile-soft);
+    border: 1px solid var(--tile-line);
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .dash-tile:hover .dash-open,
+  .dash-tile:focus-visible .dash-open {
+    background: var(--tone);
+    border-color: var(--tone);
+    color: #fff;
+  }
+
+  .dash-tile-body { padding: 22px 20px 6px; }
+  .dash-value {
+    font-size: 2.4rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-label { margin-top: 8px; font-size: .92rem; font-weight: 600; color: var(--tile-soft); }
+
+  /* Chart sits straight on the dark tile, so the existing white lines read clearly */
+  .dash-chart { margin-top: auto; height: 80px; padding-top: 8px; }
+  .dash-chart canvas { display: block; width: 100% !important; }
+
+  /* Tones (bright enough to work on the dark tile) */
+  .dash-blue  { --tone: #5b74ff; }
+  .dash-teal  { --tone: #14b8a6; }
+  .dash-amber { --tone: #f59e0b; }
+  .dash-rose  { --tone: #f43f5e; }
+
+  /* Empty state */
+  .dash-empty {
+    text-align: center;
+    padding: 72px 16px;
+    background: var(--dash-surface);
+    border: 1px dashed var(--dash-line);
+    border-radius: var(--dash-radius);
+    color: var(--dash-soft);
+  }
+  .dash-empty .bi { font-size: 2.25rem; display: block; margin-bottom: 10px; opacity: .6; }
+  .dash-empty-title { color: var(--dash-ink); font-weight: 700; margin: 0 0 4px; }
+  .dash-empty-text { margin: 0 auto; max-width: 380px; font-size: .9rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dash-tile, .dash-open { transition: none; }
+  }
+</style>

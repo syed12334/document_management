@@ -1,0 +1,101 @@
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:01:57.332Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:02:57.030Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:03:47.238Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:07:12.359Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:07:16.064Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:07:42.882Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:08:46.286Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:09:56.715Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:10:05.480Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:10:13.660Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:11:57.690Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:12:37.075Z"}
+{"level":"info","message":"Role permissions fetched","service":"dms","timestamp":"2026-09-24T10:12:42.958Z"}
+{"level":"info","message":"Role permissions fetched [object Object]","service":"dms","timestamp":"2026-09-24T10:13:48.687Z"}
+{"level":"info","message":"Role permissions fetched [object Object]","service":"dms","timestamp":"2026-09-24T10:13:53.211Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:14:50.149Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:14:58.111Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:15:40.198Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:15:43.299Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:15:50.823Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:16:20.253Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:17:40.165Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:18:54.195Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:19:00.537Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:19:28.134Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:19:31.733Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:19:33.530Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-24T10:23:43.558Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-24T10:29:12.979Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:29:32.342Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:29:35.150Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:32:30.328Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:32:35.858Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:35:56.771Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T10:36:18.670Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-24T10:38:24.519Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-24T10:40:24.285Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T11:06:20.809Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T11:06:52.108Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-24T11:46:59.751Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T04:52:39.113Z"}
+{"level":"info","message":{"_csrf":"zAVbobLu-emET0hHs7YZ-bRY40jUuXBkcpyY","permissions":["5","46","13","9","17","52","45","8","4","16","12","20","43","44","6","2","14","10","18","41","7","3","15","11","19","42"],"roles":"1"},"service":"dms","timestamp":"2026-09-25T04:55:52.348Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T04:58:00.921Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T05:12:44.406Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T05:13:39.295Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T08:51:18.239Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-25T08:51:34.580Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T05:00:20.829Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T05:21:10.497Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:15:32.023Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:15:41.240Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:16:15.965Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:20:01.002Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:20:54.241Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-28T07:21:10.948Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:58:35.894Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:58:52.315Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:11.248Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:23.257Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:29.455Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:43.488Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:47.274Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:56.634Z"}
+{"level":"info","message":"Role permissions fetched ","service":"dms","timestamp":"2026-09-28T08:59:58.221Z"}
+{"level":"info","message":{"currentPage":1,"hasNextPage":false,"hasPreviousPage":false,"limit":10,"nextPage":2,"permissions":[{"permission":{"id":46,"name":"add-folder"},"permission_id":46,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":44,"name":"download-user-history"},"permission_id":44,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":43,"name":"download-audit-logs"},"permission_id":43,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":42,"name":"view-user-history"},"permission_id":42,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":41,"name":"view-audit-logs"},"permission_id":41,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":7,"name":"view-document"},"permission_id":7,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":3,"name":"view-folder"},"permission_id":3,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":20,"name":"delete-user"},"permission_id":20,"role":{"id":1,"name":"Admin"},"role_id":1}],"previousPage":0,"search":"","totalPages":1,"totalPermissions":2},"service":"dms","timestamp":"2026-09-28T09:01:54.534Z"}
+{"level":"info","message":{"currentPage":2,"hasNextPage":false,"hasPreviousPage":true,"limit":10,"nextPage":3,"permissions":[{"permission":{"id":19,"name":"view-user"},"permission_id":19,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":18,"name":"edit-user"},"permission_id":18,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":17,"name":"add-user"},"permission_id":17,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":16,"name":"delete-permission"},"permission_id":16,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":15,"name":"view-permission"},"permission_id":15,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":14,"name":"edit-permission"},"permission_id":14,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":13,"name":"add-permission"},"permission_id":13,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":12,"name":"delete-role"},"permission_id":12,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":11,"name":"view-role"},"permission_id":11,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":10,"name":"edit-role"},"permission_id":10,"role":{"id":1,"name":"Admin"},"role_id":1}],"previousPage":1,"search":"","totalPages":1,"totalPermissions":2},"service":"dms","timestamp":"2026-09-28T09:03:01.752Z"}
+{"level":"info","message":{"currentPage":1,"hasNextPage":false,"hasPreviousPage":false,"limit":10,"nextPage":2,"permissions":[{"permission":{"id":46,"name":"add-folder"},"permission_id":46,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":44,"name":"download-user-history"},"permission_id":44,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":43,"name":"download-audit-logs"},"permission_id":43,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":42,"name":"view-user-history"},"permission_id":42,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":41,"name":"view-audit-logs"},"permission_id":41,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":7,"name":"view-document"},"permission_id":7,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":3,"name":"view-folder"},"permission_id":3,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":20,"name":"delete-user"},"permission_id":20,"role":{"id":1,"name":"Admin"},"role_id":1}],"previousPage":0,"search":"","totalPages":1,"totalPermissions":2},"service":"dms","timestamp":"2026-09-28T09:03:43.096Z"}
+{"level":"info","message":{"currentPage":1,"hasNextPage":false,"hasPreviousPage":false,"limit":10,"nextPage":2,"permissions":[{"permission":{"id":46,"name":"add-folder"},"permission_id":46,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":44,"name":"download-user-history"},"permission_id":44,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":43,"name":"download-audit-logs"},"permission_id":43,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":42,"name":"view-user-history"},"permission_id":42,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":41,"name":"view-audit-logs"},"permission_id":41,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":7,"name":"view-document"},"permission_id":7,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":3,"name":"view-folder"},"permission_id":3,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":20,"name":"delete-user"},"permission_id":20,"role":{"id":1,"name":"Admin"},"role_id":1}],"previousPage":0,"search":"","totalPages":1,"totalPermissions":2},"service":"dms","timestamp":"2026-09-28T09:05:06.101Z"}
+{"level":"info","message":{"currentPage":1,"hasNextPage":false,"hasPreviousPage":false,"limit":10,"nextPage":2,"permissions":[{"permission":{"id":46,"name":"add-folder"},"permission_id":46,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":45,"name":"dashboard-view"},"permission_id":45,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":44,"name":"download-user-history"},"permission_id":44,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":43,"name":"download-audit-logs"},"permission_id":43,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":42,"name":"view-user-history"},"permission_id":42,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":41,"name":"view-audit-logs"},"permission_id":41,"role":{"id":1,"name":"Admin"},"role_id":1},{"permission":{"id":7,"name":"view-document"},"permission_id":7,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":3,"name":"view-folder"},"permission_id":3,"role":{"id":2,"name":"Customer"},"role_id":2},{"permission":{"id":20,"name":"delete-user"},"permission_id":20,"role":{"id":1,"name":"Admin"},"role_id":1}],"previousPage":0,"search":"","totalPages":1,"totalPermissions":2},"service":"dms","timestamp":"2026-09-28T09:05:33.501Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T05:46:50.427Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:16:17.062Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:17:47.170Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:18:03.335Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:38:10.685Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:38:35.983Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:52:34.172Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:52:48.201Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:53:04.891Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T07:53:11.336Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T09:07:39.887Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T10:36:59.174Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-29T10:40:47.543Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T05:56:55.058Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T05:59:32.136Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T06:04:24.436Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T06:04:31.671Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T07:21:37.552Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:08:16.973Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:15:30.657Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:17:07.349Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:17:37.922Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:18:32.643Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:19:26.377Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:20:02.440Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T09:20:02.796Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T10:13:19.325Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T13:03:04.380Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T13:06:49.248Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T13:10:30.252Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T13:12:06.384Z"}
+{"level":"info","message":"New login","service":"dms","timestamp":"2026-09-30T13:12:24.572Z"}

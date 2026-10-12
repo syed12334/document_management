@@ -1,0 +1,373 @@
+<%
+  const oldData = (typeof old !== 'undefined' && old) ? old : {};
+  const errs = (typeof errors !== 'undefined' && errors) ? errors : {};
+  const allUsers = (typeof users !== 'undefined' && users) ? users : [];
+  const allFolders = (typeof folders !== 'undefined' && folders) ? folders : [];
+  const selectedUserIds = [].concat(oldData.user_id || []).map(String);
+  const hasErrors = Object.keys(errs).length > 0;
+%>
+<div class="body flex-grow-1">
+  <div class="fd-shell">
+
+    <!-- Page header -->
+    <header class="fd-head">
+      <a href="<%= appUrl %>folders" class="fd-back" aria-label="Back to folders" title="Back to folders">
+        <i class="bi bi-arrow-left"></i>
+      </a>
+      <div>
+        <h1 class="fd-title">Add folder</h1>
+        <p class="fd-sub">Create a folder and choose who can access it.</p>
+      </div>
+    </header>
+
+    <% if (hasErrors) { %>
+      <div class="fd-alert" role="alert">
+        <i class="bi bi-exclamation-triangle"></i>
+        <span>Fix the highlighted fields and save again.</span>
+      </div>
+    <% } %>
+
+    <form action="<%= appUrl %>folders/store" method="POST" id="folderForm" novalidate>
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <div class="fd-grid">
+
+        <!-- Left: fields -->
+        <div class="fd-main">
+
+          <section class="fd-panel">
+            <div class="fd-panel__head">
+              <span class="fd-icon"><i class="bi bi-folder-plus"></i></span>
+              <div>
+                <h2>Folder details</h2>
+                <p>Name the folder and choose where it lives.</p>
+              </div>
+            </div>
+
+            <div class="fd-panel__body">
+              <div class="fd-field">
+                <label class="fd-label" for="folderName">Folder name <span class="fd-req">*</span></label>
+                <input type="text" id="folderName" name="name"
+                       class="form-control fd-input <%= errs.name ? 'is-invalid' : '' %>"
+                       value="<%= oldData.name ? oldData.name : '' %>"
+                       placeholder="e.g. Invoices 2026" autocomplete="off" autofocus>
+                <% if (errs.name) { %>
+                  <div class="fd-error"><i class="bi bi-exclamation-circle"></i> <%= errs.name %></div>
+                <% } %>
+              </div>
+
+              <div class="fd-field">
+                <label class="fd-label" for="parentFolder">Parent folder</label>
+                <select name="parent_id" id="parentFolder" class="form-select fd-input">
+                  <option value="">No parent (top level)</option>
+                  <% allFolders.forEach(folder => { %>
+                    <option value="<%= folder.id %>"
+                      <%= String(oldData.parent_id || '') === String(folder.id) ? 'selected' : '' %>>
+                      <%= folder.name %>
+                    </option>
+                  <% }) %>
+                </select>
+                <div class="fd-hint">Leave empty to create the folder at the top level.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="fd-panel">
+            <div class="fd-panel__head">
+              <span class="fd-icon"><i class="bi bi-people"></i></span>
+              <div>
+                <h2>Access</h2>
+                <p>Pick the users for this folder and set their permission.</p>
+              </div>
+            </div>
+
+            <div class="fd-panel__body">
+              <div class="fd-field">
+                <label class="fd-label" for="folderUsers">Users <span class="fd-req">*</span></label>
+                <select name="user_id[]" id="folderUsers"
+                        class="form-select fd-input <%= errs.user_id ? 'is-invalid' : '' %>"
+                        multiple data-placeholder="Select one or more users">
+                  <% allUsers.forEach(user => { %>
+                    <option value="<%= user.id %>"
+                      <%= selectedUserIds.includes(String(user.id)) ? 'selected' : '' %>>
+                      <%= user.username %>
+                    </option>
+                  <% }) %>
+                </select>
+                <% if (errs.user_id) { %>
+                  <div class="fd-error"><i class="bi bi-exclamation-circle"></i> <%= errs.user_id %></div>
+                <% } %>
+              </div>
+
+              <div class="fd-toggle <%= errs.is_permission ? 'has-error' : '' %>">
+                <div>
+                  <div class="fd-toggle__label">Grant permission <span class="fd-req">*</span></div>
+                  <div class="fd-toggle__desc">Give the selected users access to this folder.</div>
+                </div>
+                <label class="fd-switch" aria-label="Grant permission">
+                  <input type="checkbox" name="is_permission" id="isPermission" value="1" <%= oldData.is_permission ? 'checked' : '' %>>
+                  <span class="fd-switch__track"></span>
+                </label>
+              </div>
+              <% if (errs.is_permission) { %>
+                <div class="fd-error"><i class="bi bi-exclamation-circle"></i> <%= errs.is_permission %></div>
+              <% } %>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right: live summary -->
+        <aside class="fd-aside" aria-label="Summary">
+          <div class="fd-summary">
+            <h2 class="fd-summary__title">Summary</h2>
+
+            <div class="fd-path" id="sumPath" aria-live="polite">
+              <i class="bi bi-folder2-open"></i>
+              <span class="fd-path__text"></span>
+            </div>
+
+            <dl class="fd-summary__list">
+              <div>
+                <dt>Location</dt>
+                <dd id="sumLocation">Top level</dd>
+              </div>
+              <div>
+                <dt>Users</dt>
+                <dd>
+                  <span id="sumUserCount">0 selected</span>
+                  <div class="fd-chips" id="sumUsers"></div>
+                </dd>
+              </div>
+              <div>
+                <dt>Permission</dt>
+                <dd><span class="fd-status" id="sumPerm">Not granted</span></dd>
+              </div>
+            </dl>
+
+            <div class="fd-actions">
+              <button type="submit" class="btn fd-btn-primary" id="saveBtn">
+                <span class="spinner-border spinner-border-sm d-none" id="saveSpinner" aria-hidden="true"></span>
+                <i class="bi bi-check2-circle" id="saveIcon"></i>
+                Save folder
+              </button>
+              <a href="<%= appUrl %>folders" class="btn fd-btn-ghost">Cancel</a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </form>
+
+  </div>
+</div>
+
+<style>
+  /* Surfaces follow the layout (light/dark); accent is fixed to #2f7d6f */
+  .fd-shell {
+    --fd-accent: #2f7d6f;
+    --fd-accent-dark: #256659;
+    --fd-accent-soft: #e4f1ee;
+
+    --fd-surface: var(--surface, #ffffff);
+    --fd-hover:   var(--surface-2, #f7f9fb);
+    --fd-border:  var(--line, #e3e8ee);
+    --fd-text:    var(--ink, #14202b);
+    --fd-muted:   var(--ink-soft, #5b6b7a);
+    --fd-danger:  #d0342c;
+    --fd-ok:      #1f7a5c;
+
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 0 1rem 2rem;
+    color: var(--fd-text);
+  }
+  [data-coreui-theme="dark"] .fd-shell { --fd-accent-soft: rgba(47, 125, 111, .24); --fd-ok: #6fd3b3; }
+  /* Select2 dropdowns are rendered on <body>, so they need the tokens too */
+  body { --fd-accent: #2f7d6f; }
+
+  /* Header */
+  .fd-head { display: flex; align-items: center; gap: 1rem; margin: .25rem 0 1.5rem; }
+  .fd-title { font-size: 1.65rem; font-weight: 700; letter-spacing: -.02em; margin: 0; line-height: 1.2; }
+  .fd-sub { margin: .2rem 0 0; color: var(--fd-muted); font-size: .92rem; }
+  .fd-back { display: inline-grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--fd-border); background: var(--fd-surface); color: var(--fd-text); text-decoration: none; flex: none; transition: background .15s, border-color .15s, color .15s; }
+  .fd-back:hover { border-color: var(--fd-accent); color: var(--fd-accent); }
+  .fd-back:focus-visible { outline: 2px solid var(--fd-accent); outline-offset: 2px; }
+
+  .fd-alert { display: flex; align-items: center; gap: .6rem; padding: .75rem 1rem; margin-bottom: 1.25rem; border-radius: 12px; border: 1px solid #f3c3c7; background: #fdeced; color: #9b1c27; font-size: .9rem; }
+  [data-coreui-theme="dark"] .fd-alert { background: #2c1416; border-color: #7a2d31; color: #ff9c95; }
+
+  /* Layout */
+  .fd-grid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 1.5rem; align-items: start; }
+  .fd-main { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  /* Panels */
+  .fd-panel { background: var(--fd-surface); border: 1px solid var(--fd-border); border-radius: 16px; box-shadow: 0 1px 2px rgba(20,32,43,.04), 0 10px 30px -16px rgba(20,32,43,.14); }
+  .fd-panel__head { display: flex; align-items: center; gap: .9rem; padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--fd-border); }
+  .fd-panel__head h2 { font-size: 1rem; font-weight: 650; margin: 0; }
+  .fd-panel__head p { margin: .1rem 0 0; font-size: .85rem; color: var(--fd-muted); }
+  .fd-icon { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--fd-accent-soft); color: var(--fd-accent); font-size: 1.15rem; flex: none; }
+  [data-coreui-theme="dark"] .fd-icon { color: #8fd6c8; }
+  .fd-panel__body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.4rem; }
+
+  /* Fields */
+  .fd-label { display: block; font-size: .88rem; font-weight: 600; margin-bottom: .45rem; }
+  .fd-req { color: var(--fd-danger); }
+  .fd-input.form-control, .fd-input.form-select { min-height: 46px; border-radius: 10px; border-color: var(--fd-border); background-color: var(--fd-surface); color: var(--fd-text); }
+  .fd-input:focus { border-color: var(--fd-accent); box-shadow: 0 0 0 3px var(--fd-accent-soft); }
+  .fd-input.is-invalid { border-color: var(--fd-danger); }
+  .fd-hint { margin-top: .4rem; font-size: .82rem; color: var(--fd-muted); }
+  .fd-error { margin-top: .4rem; font-size: .84rem; color: var(--fd-danger); display: flex; align-items: center; gap: .35rem; }
+
+  /* Select2 (Bootstrap 5 theme) */
+  .select2-container--bootstrap-5 .select2-selection { min-height: 46px; border-radius: 10px; border-color: var(--line, #e3e8ee); background-color: var(--surface, #fff); color: var(--ink, #14202b); }
+  .select2-container--bootstrap-5.select2-container--focus .select2-selection,
+  .select2-container--bootstrap-5.select2-container--open .select2-selection { border-color: #2f7d6f; box-shadow: 0 0 0 3px rgba(47, 125, 111, .2); }
+  .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice { background: rgba(47, 125, 111, .14); color: #2f7d6f; border: 0; border-radius: 999px; padding: .15rem .65rem; font-size: .82rem; font-weight: 500; }
+  [data-coreui-theme="dark"] .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice { color: #8fd6c8; }
+  .select2-container--bootstrap-5 .select2-selection--multiple .select2-selection__choice__remove { color: inherit; margin-right: .3rem; }
+  .select2-container--bootstrap-5 .select2-dropdown { border-color: var(--line, #e3e8ee); border-radius: 12px; background: var(--surface, #fff); color: var(--ink, #14202b); box-shadow: 0 12px 32px rgba(20, 32, 43, .18); overflow: hidden; }
+  .select2-container--bootstrap-5 .select2-dropdown .select2-results__options:not(.select2-results__options--nested) { background: var(--surface, #fff) !important; }
+  .select2-container--bootstrap-5 .select2-results__option { color: var(--ink, #14202b); }
+  .select2-container--bootstrap-5 .select2-results__option--highlighted { background: rgba(47, 125, 111, .14) !important; color: #2f7d6f !important; }
+  [data-coreui-theme="dark"] .select2-container--bootstrap-5 .select2-results__option--highlighted { color: #8fd6c8 !important; }
+  .select2-container--bootstrap-5 .select2-results__option--selected { background: var(--surface-2, #f7f9fb); }
+  .select2-container--bootstrap-5 .select2-search__field { background: var(--surface, #fff); color: var(--ink, #14202b); }
+  .is-invalid + .select2-container--bootstrap-5 .select2-selection { border-color: #d0342c; }
+
+  /* Toggle */
+  .fd-toggle { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .95rem 1.1rem; background: var(--fd-hover); border: 1px solid var(--fd-border); border-radius: 12px; }
+  .fd-toggle.has-error { border-color: var(--fd-danger); }
+  .fd-toggle__label { font-weight: 600; font-size: .92rem; }
+  .fd-toggle__desc { font-size: .84rem; color: var(--fd-muted); margin-top: .1rem; }
+  .fd-switch { position: relative; display: inline-block; width: 46px; height: 26px; flex: none; margin: 0; }
+  .fd-switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+  .fd-switch__track { position: absolute; inset: 0; border-radius: 999px; background: #b9c3cc; transition: background .15s; }
+  .fd-switch__track::before { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .15s; }
+  .fd-switch input:checked + .fd-switch__track { background: var(--fd-accent); }
+  .fd-switch input:checked + .fd-switch__track::before { transform: translateX(20px); }
+  .fd-switch input:focus-visible + .fd-switch__track { outline: 2px solid var(--fd-accent); outline-offset: 2px; }
+
+  /* Summary aside */
+  .fd-aside { position: sticky; top: 84px; }
+  .fd-summary { background: var(--fd-surface); border: 1px solid var(--fd-border); border-radius: 16px; padding: 1.25rem; box-shadow: 0 1px 2px rgba(20,32,43,.04), 0 10px 30px -16px rgba(20,32,43,.14); }
+  .fd-summary__title { font-size: .95rem; font-weight: 650; margin: 0 0 .9rem; }
+  .fd-path { display: flex; align-items: flex-start; gap: .6rem; padding: .8rem .9rem; border-radius: 12px; background: var(--fd-accent-soft); color: var(--fd-accent); font-weight: 600; font-size: .92rem; word-break: break-word; }
+  [data-coreui-theme="dark"] .fd-path { color: #8fd6c8; }
+  .fd-path i { font-size: 1.1rem; margin-top: .05rem; }
+  .fd-path.is-empty { background: var(--fd-hover); color: var(--fd-muted); font-weight: 500; }
+  .fd-summary__list { margin: 1.1rem 0 0; display: flex; flex-direction: column; gap: 1rem; }
+  .fd-summary__list > div { display: flex; flex-direction: column; gap: .25rem; }
+  .fd-summary__list dt { font-size: .82rem; font-weight: 500; color: var(--fd-muted); }
+  .fd-summary__list dd { margin: 0; font-size: .92rem; font-weight: 500; }
+  .fd-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; }
+  .fd-chip { padding: .15rem .65rem; border-radius: 999px; background: var(--fd-hover); border: 1px solid var(--fd-border); font-size: .8rem; }
+  .fd-status { display: inline-flex; align-items: center; gap: .4rem; }
+  .fd-status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #aab4bd; }
+  .fd-status.is-on { color: var(--fd-ok); }
+  .fd-status.is-on::before { background: var(--fd-ok); }
+
+  /* Buttons */
+  .fd-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: 1.4rem; padding-top: 1.25rem; border-top: 1px solid var(--fd-border); }
+  .fd-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; border-radius: 10px; border: 0; background: var(--fd-accent); color: #fff; font-weight: 600; box-shadow: 0 1px 2px rgba(47,125,111,.4), 0 8px 16px -8px rgba(47,125,111,.6); transition: background .15s; }
+  .fd-btn-primary:hover, .fd-btn-primary:active { background: var(--fd-accent-dark) !important; color: #fff !important; }
+  .fd-btn-primary:focus-visible { outline: 2px solid var(--fd-accent); outline-offset: 2px; }
+  .fd-btn-primary:disabled { opacity: .7; }
+  .fd-btn-ghost { min-height: 42px; border-radius: 10px; border: 1px solid var(--fd-border); background: transparent; color: var(--fd-text); font-weight: 500; display: inline-flex; align-items: center; justify-content: center; }
+  .fd-btn-ghost:hover { border-color: var(--fd-accent); color: var(--fd-accent); background: transparent; }
+
+  /* Responsive */
+  @media (max-width: 860px) {
+    .fd-grid { grid-template-columns: 1fr; }
+    .fd-aside { position: static; }
+  }
+  @media (max-width: 575.98px) {
+    .fd-panel__head, .fd-panel__body { padding-left: 1.1rem; padding-right: 1.1rem; }
+    .fd-title { font-size: 1.4rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fd-switch__track, .fd-switch__track::before, .fd-back, .fd-btn-primary { transition: none; }
+  }
+</style>
+
+<script>
+  (function () {
+    var form = document.getElementById('folderForm');
+    var nameEl = document.getElementById('folderName');
+    var parentEl = document.getElementById('parentFolder');
+    var usersEl = document.getElementById('folderUsers');
+    var permEl = document.getElementById('isPermission');
+
+    var pathBox = document.getElementById('sumPath');
+    var pathText = pathBox.querySelector('.fd-path__text');
+    var locEl = document.getElementById('sumLocation');
+    var countEl = document.getElementById('sumUserCount');
+    var chipsEl = document.getElementById('sumUsers');
+    var permBadge = document.getElementById('sumPerm');
+
+    // Turn on Select2 if the layout loads it and it isn't already active
+    if (window.jQuery && jQuery.fn.select2 && !jQuery(usersEl).hasClass('select2-hidden-accessible')) {
+      jQuery(usersEl).select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+        placeholder: usersEl.getAttribute('data-placeholder') || 'Select users',
+        closeOnSelect: false
+      });
+    }
+
+    function selectedText(select) {
+      var opt = select.options[select.selectedIndex];
+      return opt && opt.value ? opt.text.trim() : '';
+    }
+
+    function render() {
+      var name = nameEl.value.trim();
+      var parent = selectedText(parentEl);
+
+      // Path
+      if (name) {
+        pathText.textContent = (parent ? parent + ' / ' : '') + name;
+        pathBox.classList.remove('is-empty');
+      } else {
+        pathText.textContent = 'Untitled folder';
+        pathBox.classList.add('is-empty');
+      }
+      locEl.textContent = parent || 'Top level';
+
+      // Users
+      var picked = Array.prototype.filter.call(usersEl.options, function (o) { return o.selected; });
+      countEl.textContent = picked.length + ' selected';
+      chipsEl.innerHTML = '';
+      picked.forEach(function (o) {
+        var chip = document.createElement('span');
+        chip.className = 'fd-chip';
+        chip.textContent = o.text.trim();
+        chipsEl.appendChild(chip);
+      });
+
+      // Permission
+      permBadge.textContent = permEl.checked ? 'Granted' : 'Not granted';
+      permBadge.classList.toggle('is-on', permEl.checked);
+    }
+
+    ['input', 'change'].forEach(function (evt) {
+      nameEl.addEventListener(evt, render);
+      parentEl.addEventListener(evt, render);
+      usersEl.addEventListener(evt, render);
+      permEl.addEventListener(evt, render);
+    });
+    // Select2 fires jQuery events, so listen for those too
+    if (window.jQuery) {
+      jQuery(usersEl).on('change select2:select select2:unselect', render);
+      jQuery(parentEl).on('change select2:select', render);
+    }
+    render();
+
+    // Prevent double submits and show progress
+    form.addEventListener('submit', function () {
+      var btn = document.getElementById('saveBtn');
+      btn.disabled = true;
+      document.getElementById('saveSpinner').classList.remove('d-none');
+      document.getElementById('saveIcon').classList.add('d-none');
+    });
+  })();
+</script>

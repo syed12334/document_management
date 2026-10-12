@@ -1,0 +1,333 @@
+<style>
+  .au-page {
+    --au-ink: #12222b;
+    --au-muted: #5f727d;
+    --au-line: #dbe4e8;
+    --au-surface: #ffffff;
+    --au-bg: #eef3f5;
+    --au-accent: #0d7f78;
+    --au-accent-strong: #0a625d;
+    --au-danger: #c62f3b;
+    --au-danger-soft: #fdecee;
+    background: var(--au-bg);
+    min-height: 100%;
+    padding: 48px 16px;
+    color: var(--au-ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .au-shell {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    background: var(--au-surface);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px -20px rgba(18, 34, 43, 0.25);
+  }
+
+  /* Left panel */
+  .au-side {
+    background: #2f7d6f;
+    color: #e8f0f2;
+    padding: 36px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .au-side h1 {
+    margin: 0;
+    font-size: 26px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .au-side p {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #a9bcc4;
+  }
+
+  .au-tips-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 12px;
+  }
+
+  .au-tips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .au-tips li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #a9bcc4;
+  }
+
+  .au-tips li::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    margin-top: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #35c2b6;
+  }
+
+  /* Form panel */
+  .au-main { padding: 36px 40px 40px; }
+  .au-main-head { margin-bottom: 26px; }
+
+  .au-main-head h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+
+  .au-main-head p {
+    margin: 4px 0 0;
+    font-size: 13.5px;
+    color: var(--au-muted);
+  }
+
+  .au-alert {
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: var(--au-danger-soft);
+    color: var(--au-danger);
+    font-size: 13.5px;
+    font-weight: 500;
+    border-left: 3px solid var(--au-danger);
+  }
+
+  .au-field { min-width: 0; }
+
+  .au-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--au-ink);
+  }
+
+  .au-label .au-req { color: var(--au-danger); margin-left: 2px; }
+
+  .au-input {
+    display: block;
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    font: inherit;
+    font-size: 14.5px;
+    color: var(--au-ink);
+    background: #f6f9fa;
+    border: 1.5px solid transparent;
+    border-radius: 12px;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+  }
+
+  .au-input::placeholder { color: #93a4ad; }
+  .au-input:hover { background: #f0f5f7; }
+
+  .au-input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--au-accent);
+    box-shadow: 0 0 0 4px rgba(13, 127, 120, 0.14);
+  }
+
+  .au-input.is-invalid {
+    background: var(--au-danger-soft);
+    border-color: var(--au-danger);
+  }
+
+  .au-error {
+    margin-top: 6px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--au-danger);
+  }
+
+  .au-hint {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--au-muted);
+  }
+
+  .au-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 1px solid var(--au-line);
+  }
+
+  .au-btn {
+    height: 44px;
+    padding: 0 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  }
+
+  .au-btn:active { transform: translateY(1px); }
+  .au-btn:focus-visible { outline: 3px solid rgba(13, 127, 120, 0.35); outline-offset: 2px; }
+
+  .au-btn--ghost {
+    background: transparent;
+    color: var(--au-ink);
+    border-color: var(--au-line);
+  }
+
+  .au-btn--ghost:hover { background: #f6f9fa; color: var(--au-ink); }
+
+  .au-btn--primary {
+    background: var(--au-accent);
+    color: #fff;
+    min-width: 152px;
+  }
+
+  .au-btn--primary:hover { background: var(--au-accent-strong); color: #fff; }
+  .au-btn--primary[disabled] { opacity: 0.7; cursor: progress; }
+
+  @media (max-width: 800px) {
+    .au-page { padding: 20px 12px; }
+    .au-shell { grid-template-columns: 1fr; }
+    .au-side { padding: 26px 24px; gap: 20px; }
+    .au-main { padding: 26px 24px 28px; }
+  }
+
+  @media (max-width: 480px) {
+    .au-actions { flex-direction: column-reverse; }
+    .au-btn { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .au-page * { transition: none !important; }
+  }
+</style>
+
+<%
+  // Works with both shapes:
+  //  - object keyed by field: { name: 'Permission name is required' }
+  //  - array of express-validator errors: [{ path: 'name', msg: '...' }]
+  var formErrors = (typeof errors !== 'undefined' && errors) ? errors : {};
+  var oldData = (typeof old !== 'undefined' && old) ? old : {};
+
+  function getError(field) {
+    if (Array.isArray(formErrors)) {
+      var found = formErrors.find(function (e) {
+        return e.path === field || e.param === field;
+      });
+      return found ? found.msg : '';
+    }
+    return formErrors[field] || '';
+  }
+
+  var nameError = getError('name');
+  var generalError = getError('general');
+%>
+
+<div class="body flex-grow-1">
+  <div class="au-page">
+    <div class="au-shell">
+
+      <!-- Left: intro + tips -->
+      <aside class="au-side">
+        <div>
+          <h1>Add a new permission</h1>
+          <p>Add a permission to control what actions users can perform.</p>
+        </div>
+
+        <div>
+          <h3 class="au-tips-title">Naming tips</h3>
+          <ul class="au-tips">
+            <li>Describe one action, such as “view-user-history” or “delete-document”.</li>
+            <li>Keep each permission name unique.</li>
+            <li>Use a consistent format, like lowercase words joined by hyphens.</li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Right: form -->
+      <main class="au-main">
+        <div class="au-main-head">
+          <h2>Permission details</h2>
+          <p>Fields marked with <span style="color:#c62f3b">*</span> are required.</p>
+        </div>
+
+        <form action="<%= appUrl %>permissions/store" method="POST" autocomplete="off" id="addPermissionForm" novalidate>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+          <% if (generalError) { %>
+            <div class="au-alert" role="alert"><%= generalError %></div>
+          <% } %>
+
+          <!-- Permission name -->
+          <div class="au-field">
+            <label class="au-label" for="name">Permission name<span class="au-req">*</span></label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              class="au-input <%= nameError ? 'is-invalid' : '' %>"
+              value="<%= oldData.name ? oldData.name : '' %>"
+              placeholder="e.g. view-user-history"
+              autocomplete="off"
+              autofocus
+            >
+            <% if (nameError) { %>
+              <div class="au-error"><%= nameError %></div>
+            <% } else { %>
+              <div class="au-hint">This name is used to check access and can be assigned to roles.</div>
+            <% } %>
+          </div>
+
+          <div class="au-actions">
+            <a href="<%= appUrl %>permissions" class="au-btn au-btn--ghost">Cancel</a>
+            <button type="submit" class="au-btn au-btn--primary" id="saveBtn">Save permission</button>
+          </div>
+        </form>
+      </main>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var form = document.getElementById('addPermissionForm');
+    var saveBtn = document.getElementById('saveBtn');
+
+    // Prevent double submits
+    form.addEventListener('submit', function () {
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+    });
+  })();
+</script>

@@ -1,0 +1,69 @@
+<div class="body flex-grow-1">
+    <div class="container-lg px-4">
+        <div class="card mb-4">
+            <div class="card-body position-relative">
+
+                <h3>View Document</h3>
+
+                <hr />
+
+                <h5>
+                    File name : <%= document.original_name %>
+                </h5>
+
+                <h5>
+                    Folder :
+                    <%= document.folder ? document.folder.name : 'No Folder' %>
+                </h5>
+
+                <h5>
+                    Uploaded by :
+                    <%= document.uploader ? document.uploader.name : 'Unknown' %>
+                </h5>
+
+                <h5>
+                    File size :
+                    <%= (Number(document.file_size) / 1024).toFixed(2) %> KB
+                </h5>
+
+                <!-- Preview: image, PDF, or fallback -->
+                <%
+                    const ext = (document.file_extension || '').replace('.', '').toLowerCase();
+                    const imageExts = ['pdf', 'jpeg', 'png', 'gif', 'webp', 'svg'];
+                    const isImage = imageExts.includes(ext);
+                    const isPdf = ext === 'pdf';
+                    const fileUrl = `${appUrl}storage/documents/${document.stored_name}`;
+                %>
+
+                <div class="mt-4 mb-3">
+                    <h5>Preview</h5>
+
+                    <% if (isImage) { %>
+                         <iframe
+                            src="<%= fileUrl %>"
+                            style="width: 100%; height: 600px; border: 1px solid #e5e7eb; border-radius: 8px;"
+                            title="<%= document.original_name %>"
+                        ></iframe>
+                    <% } else if (isPdf) { %>
+                        <iframe
+                            src="<%= fileUrl %>"
+                            style="width: 100%; height: 600px; border: 1px solid #e5e7eb; border-radius: 8px;"
+                            title="<%= document.original_name %>"
+                        ></iframe>
+                    <% } else { %>
+                        <div class="p-4 text-center" style="border: 1px dashed #d9dce1; border-radius: 8px; color: #6b7280;">
+                            Preview isn't available for <strong>.<%= ext %></strong> files.
+                            <br>
+                            <a href="<%= fileUrl %>" class="btn btn-sm btn-primary mt-2">Download to view</a>
+                        </div>
+                    <% } %>
+                </div>
+
+                <a href="<%= appUrl %>documents" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>

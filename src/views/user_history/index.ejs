@@ -1,0 +1,420 @@
+<style>
+  .lh-page {
+    --lh-ink: #12222b;
+    --lh-muted: #5f727d;
+    --lh-line: #e3eaee;
+    --lh-surface: #ffffff;
+    --lh-bg: #eef3f5;
+    --lh-accent: #0d7f78;
+    --lh-accent-strong: #0a625d;
+    --lh-accent-soft: #e3f4f2;
+    --lh-danger: #c62f3b;
+    --lh-danger-soft: #fdecee;
+    --lh-success: #1f7a4d;
+    --lh-success-soft: #e6f6ee;
+    --lh-warn: #8a5a00;
+    --lh-warn-soft: #fff3d6;
+    background: var(--lh-bg);
+    min-height: 100%;
+    padding: 40px 16px;
+    color: var(--lh-ink);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .lh-wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* Alerts */
+  .lh-alert {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding: 12px 14px;
+    border-radius: 12px; font-size: 13.5px; font-weight: 500;
+    border: 0; border-left: 3px solid;
+  }
+  .lh-alert > div { flex: 1; }
+  .lh-alert--success { background: var(--lh-success-soft); color: var(--lh-success); border-color: var(--lh-success); }
+  .lh-alert--danger { background: var(--lh-danger-soft); color: var(--lh-danger); border-color: var(--lh-danger); }
+  .lh-alert .btn-close { position: static; margin: 0; padding: 6px; font-size: 11px; }
+
+  /* Header */
+  .lh-head {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 16px; margin-bottom: 22px;
+  }
+  .lh-head h1 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  .lh-head p { margin: 4px 0 0; font-size: 13.5px; color: var(--lh-muted); }
+  .lh-count {
+    display: inline-flex; align-items: center;
+    padding: 2px 10px; border-radius: 999px;
+    background: var(--lh-accent-soft); color: var(--lh-accent-strong);
+    font-weight: 600; font-size: 12.5px;
+  }
+
+  /* Buttons */
+  .lh-btn {
+    height: 42px; padding: 0 18px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-size: 14px; font-weight: 600;
+    border-radius: 12px; border: 1.5px solid transparent;
+    cursor: pointer; text-decoration: none;
+    transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .lh-btn:active { transform: translateY(1px); }
+  .lh-btn:focus-visible { outline: 3px solid rgba(13,127,120,.35); outline-offset: 2px; }
+  .lh-btn--primary { background: var(--lh-accent); color: #fff; }
+  .lh-btn--primary:hover { background: var(--lh-accent-strong); color: #fff; }
+  .lh-btn--ghost { background: transparent; color: var(--lh-ink); border-color: var(--lh-line); }
+  .lh-btn--ghost:hover { background: #f6f9fa; color: var(--lh-ink); }
+
+  /* Card */
+  .lh-card {
+    background: var(--lh-surface);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px -28px rgba(18,34,43,.3);
+    overflow: hidden;
+  }
+
+  /* Toolbar */
+  .lh-toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    padding: 16px 20px; border-bottom: 1px solid var(--lh-line);
+  }
+  .lh-search { position: relative; flex: 1 1 260px; max-width: 380px; }
+  .lh-search i {
+    position: absolute; top: 50%; left: 14px; transform: translateY(-50%);
+    color: #93a4ad; pointer-events: none;
+  }
+  .lh-input {
+    display: block; width: 100%; height: 44px; padding: 0 14px 0 40px;
+    font: inherit; font-size: 14.5px; color: var(--lh-ink);
+    background: #f6f9fa; border: 1.5px solid transparent; border-radius: 12px;
+    box-sizing: border-box;
+    transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .lh-input::placeholder { color: #93a4ad; }
+  .lh-input:hover { background: #f0f5f7; }
+  .lh-input:focus {
+    outline: none; background: #fff; border-color: var(--lh-accent);
+    box-shadow: 0 0 0 4px rgba(13,127,120,.14);
+  }
+
+  /* Table */
+  .lh-table-wrap { overflow-x: auto; }
+  .lh-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .lh-table thead th {
+    padding: 12px 16px; text-align: left; white-space: nowrap;
+    font-size: 11.5px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--lh-muted); background: #f6f9fa;
+    border-bottom: 1px solid var(--lh-line);
+  }
+  .lh-table tbody td {
+    padding: 14px 16px; vertical-align: middle;
+    border-bottom: 1px solid var(--lh-line);
+  }
+  .lh-table tbody tr:last-child td { border-bottom: 0; }
+  .lh-table tbody tr:hover { background: #f9fbfc; }
+  .lh-id { color: var(--lh-muted); font-variant-numeric: tabular-nums; }
+  .lh-user { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+  .lh-avatar {
+    width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--lh-accent-soft); color: var(--lh-accent-strong);
+    font-size: 12.5px; font-weight: 700; text-transform: uppercase;
+  }
+  .lh-mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 12.5px; color: var(--lh-ink);
+  }
+  .lh-date { font-weight: 500; white-space: nowrap; }
+  .lh-time { color: var(--lh-muted); font-size: 12.5px; white-space: nowrap; }
+  .lh-browser {
+    display: block; max-width: 220px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; color: var(--lh-muted); font-size: 13px;
+  }
+  .lh-dash { color: #b3c0c7; }
+
+  /* Status pills */
+  .lh-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 11px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; white-space: nowrap;
+  }
+  .lh-badge::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+  }
+  .lh-badge--success { background: var(--lh-success-soft); color: var(--lh-success); }
+  .lh-badge--danger { background: var(--lh-danger-soft); color: var(--lh-danger); }
+  .lh-badge--neutral { background: #eceff1; color: #4a5b65; }
+  .lh-badge--warn { background: var(--lh-warn-soft); color: var(--lh-warn); }
+
+  /* Empty state */
+  .lh-empty { padding: 56px 16px !important; text-align: center; color: var(--lh-muted); }
+  .lh-empty i { display: block; font-size: 34px; margin-bottom: 10px; color: #b3c0c7; }
+  .lh-empty-title { margin: 0 0 4px; font-weight: 700; color: var(--lh-ink); }
+  .lh-empty-text { margin: 0; font-size: 13.5px; }
+
+  /* Pagination */
+  .lh-foot {
+    display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: space-between; gap: 12px;
+    padding: 14px 20px; border-top: 1px solid var(--lh-line);
+  }
+  .lh-foot small { color: var(--lh-muted); font-size: 13px; }
+  .lh-pager { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+  .lh-pager a, .lh-pager span {
+    min-width: 36px; height: 36px; padding: 0 12px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    font-size: 13.5px; font-weight: 600; text-decoration: none;
+    color: var(--lh-ink); border: 1.5px solid var(--lh-line); border-radius: 10px;
+    background: #fff; transition: background .15s ease, border-color .15s ease;
+  }
+  .lh-pager a:hover { background: #f6f9fa; }
+  .lh-pager .is-active a { background: var(--lh-accent); border-color: var(--lh-accent); color: #fff; }
+  .lh-pager .is-disabled span { color: #a9b6bd; background: #f6f9fa; cursor: not-allowed; }
+  .lh-pager .is-gap span { border-color: transparent; background: transparent; color: var(--lh-muted); }
+
+  /* Preloader */
+  .search-preloader {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    align-items: center; justify-content: center;
+    background: rgba(238,243,245,0);
+  }
+  .search-preloader.active { display: flex; }
+
+  @media (max-width: 640px) {
+    .lh-page { padding: 20px 12px; }
+    .lh-head h1 { font-size: 22px; }
+    .lh-search { max-width: none; }
+    .lh-foot { justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lh-page * { transition: none !important; }
+  }
+</style>
+
+<%
+  // Pagination pages (with ellipses)
+  var pages = [];
+  if (totalPages <= 7) {
+    for (var i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages.push(1);
+    if (currentPage > 4) pages.push('...');
+    var startPage = Math.max(2, currentPage - 1);
+    var endPage = Math.min(totalPages - 1, currentPage + 1);
+    for (var j = startPage; j <= endPage; j++) pages.push(j);
+    if (currentPage < totalPages - 3) pages.push('...');
+    pages.push(totalPages);
+  }
+  var baseQuery = '&limit=' + limit + '&search=' + encodeURIComponent(search || '');
+%>
+
+<div class="body flex-grow-1">
+  <div class="lh-page">
+    <div class="lh-wrap">
+
+      <% if (success) { %>
+        <div class="lh-alert lh-alert--success alert alert-dismissible fade show" role="alert">
+          <i class="bi bi-check-circle-fill"></i>
+          <div><%= success %></div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <% if (error) { %>
+        <div class="lh-alert lh-alert--danger alert alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <div><%= error %></div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>
+
+      <!-- Header -->
+      <div class="lh-head">
+        <div>
+          <h1>Login history</h1>
+          <p>
+            <span class="lh-count"><%= totalUsers %></span>
+            <%= Number(totalUsers) === 1 ? 'record' : 'records' %> found
+          </p>
+        </div>
+
+        <% if (hasPermission('view-user-history')) { %>
+          <a class="lh-btn lh-btn--primary" href="<%= appUrl %>user/login/logs/export">
+            <i class="bi bi-download"></i> Download history
+          </a>
+        <% } %>
+      </div>
+
+      <div class="lh-card">
+
+        <!-- Toolbar -->
+        <div class="lh-toolbar">
+          <div class="lh-search">
+            <i class="bi bi-search"></i>
+            <input
+              type="text"
+              name="search"
+              id="userSearch"
+              class="lh-input"
+              value="<%= search %>"
+              placeholder="Search by username, IP or browser"
+              autocomplete="off"
+              aria-label="Search login history"
+            >
+          </div>
+
+          <% if (search) { %>
+            <a href="<%= appUrl %>user/login/logs" class="lh-btn lh-btn--ghost">
+              <i class="bi bi-x-lg"></i> Clear
+            </a>
+          <% } %>
+        </div>
+
+        <!-- Table -->
+        <div class="lh-table-wrap">
+          <table class="lh-table" id="userLogsTableWrapper">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>IP address</th>
+                <th>Logged in</th>
+                <th>Logged out</th>
+                <th>Browser</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% if (user_history.length === 0) { %>
+                <tr>
+                  <td colspan="7" class="lh-empty">
+                    <i class="bi bi-clock-history"></i>
+                    <% if (search) { %>
+                      <p class="lh-empty-title">No results for “<strong><%= search %></strong>”</p>
+                      <p class="lh-empty-text">Check the spelling or try a different search.</p>
+                    <% } else { %>
+                      <p class="lh-empty-title">No login history yet</p>
+                      <p class="lh-empty-text">Sign-ins and sign-outs will appear here.</p>
+                    <% } %>
+                  </td>
+                </tr>
+              <% } %>
+
+              <% user_history.forEach(function (userHistory, index) {
+                   var uname = (userHistory.user && userHistory.user.username) ? userHistory.user.username : 'Unknown';
+                   var loginAt = userHistory.login_at ? new Date(userHistory.login_at) : null;
+                   var logoutAt = userHistory.logout_at ? new Date(userHistory.logout_at) : null;
+                   var status = userHistory.login_status;
+              %>
+                <tr>
+                  <td class="lh-id"><%= (currentPage - 1) * limit + index + 1 %></td>
+
+                  <td>
+                    <div class="lh-user">
+                      <span class="lh-avatar"><%= uname.charAt(0) %></span>
+                      <span><%= uname %></span>
+                    </div>
+                  </td>
+
+                  <td class="lh-mono"><%= userHistory.ip_address || '-' %></td>
+
+                  <td>
+                    <% if (loginAt) { %>
+                      <div class="lh-date"><%= loginAt.toLocaleDateString() %></div>
+                      <div class="lh-time"><%= loginAt.toLocaleTimeString() %></div>
+                    <% } else { %>
+                      <span class="lh-dash">-</span>
+                    <% } %>
+                  </td>
+
+                  <td>
+                    <% if (logoutAt) { %>
+                      <div class="lh-date"><%= logoutAt.toLocaleDateString() %></div>
+                      <div class="lh-time"><%= logoutAt.toLocaleTimeString() %></div>
+                    <% } else { %>
+                      <span class="lh-dash">-</span>
+                    <% } %>
+                  </td>
+
+                  <td>
+                    <span class="lh-browser" title="<%= userHistory.browser || '' %>"><%= userHistory.browser || '-' %></span>
+                  </td>
+
+                  <td>
+                    <% if (status === 'success') { %>
+                      <span class="lh-badge lh-badge--success">Success</span>
+                    <% } else if (status === 'failed') { %>
+                      <span class="lh-badge lh-badge--danger">Failed</span>
+                    <% } else if (status === 'logout') { %>
+                      <span class="lh-badge lh-badge--neutral">Logged out</span>
+                    <% } else { %>
+                      <span class="lh-badge lh-badge--warn"><%= status || '-' %></span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <% if (user_history.length > 0 && totalPages > 1) { %>
+          <div class="lh-foot">
+            <small>Page <%= currentPage %> of <%= totalPages %></small>
+
+            <nav aria-label="Login history pages">
+              <ul class="lh-pager">
+
+                <li class="<%= !hasPreviousPage ? 'is-disabled' : '' %>">
+                  <% if (hasPreviousPage) { %>
+                    <a href="<%= appUrl %>user/login/logs?page=<%= previousPage %><%= baseQuery %>">
+                      <i class="bi bi-chevron-left"></i>
+                    </a>
+                  <% } else { %>
+                    <span><i class="bi bi-chevron-left"></i></span>
+                  <% } %>
+                </li>
+
+                <% pages.forEach(function (page) { %>
+                  <% if (page === '...') { %>
+                    <li class="is-gap"><span>…</span></li>
+                  <% } else { %>
+                    <li class="<%= currentPage === page ? 'is-active' : '' %>">
+                      <a href="<%= appUrl %>user/login/logs?page=<%= page %><%= baseQuery %>"
+                         <%- currentPage === page ? 'aria-current="page"' : '' %>><%= page %></a>
+                    </li>
+                  <% } %>
+                <% }) %>
+
+                <li class="<%= !hasNextPage ? 'is-disabled' : '' %>">
+                  <% if (hasNextPage) { %>
+                    <a href="<%= appUrl %>user/login/logs?page=<%= nextPage %><%= baseQuery %>">
+                      <i class="bi bi-chevron-right"></i>
+                    </a>
+                  <% } else { %>
+                    <span><i class="bi bi-chevron-right"></i></span>
+                  <% } %>
+                </li>
+
+              </ul>
+            </nav>
+          </div>
+        <% } %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Search preloader (used by users.js) -->
+<div id="searchPreloader" class="search-preloader">
+  <div class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="mt-2 fw-semibold">Searching...</div>
+  </div>
+</div>
+
+<script src="<%= appUrl %>js/users.js"></script>
